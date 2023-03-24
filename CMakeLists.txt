@@ -86,7 +86,7 @@ set_target_properties(CWsrc
 )
 copy_sfml_dll(CWsrc)
 
-## Platformer to check structure
+## Platformer lab to check structure
 file(GLOB_RECURSE SOURCES lab_7_platformer/*.cpp lab_7_platformer/*.h)
 file(GLOB_RECURSE CMPNTS lab_7_platformer/components/*.cpp lab_7_platformer/components/*.h)
 file(GLOB_RECURSE SCENES lab_7_platformer/scenes/*.cpp lab_7_platformer/scenes/*.h)
