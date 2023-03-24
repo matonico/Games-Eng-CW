@@ -16,7 +16,8 @@ Implementing a new feature branch
 git checkout -b branch-name master
 ```      
 Do work as normal, then:
-```git add .
+```
+git add .
 git commit -m "message" 
 git push -u origin branch-name
 ```
