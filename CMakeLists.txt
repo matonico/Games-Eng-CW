@@ -85,3 +85,21 @@ set_target_properties(CWsrc
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
 copy_sfml_dll(CWsrc)
+
+## Platformer to check structure
+file(GLOB_RECURSE SOURCES lab_7_platformer/*.cpp lab_7_platformer/*.h)
+file(GLOB_RECURSE CMPNTS lab_7_platformer/components/*.cpp lab_7_platformer/components/*.h)
+file(GLOB_RECURSE SCENES lab_7_platformer/scenes/*.cpp lab_7_platformer/scenes/*.h)
+add_executable(lab_7_platformer ${SOURCES} ${RESOURCE_FILES})
+source_group("components" FILES ${CMPNTS})
+source_group("resources" FILES ${RESOURCE_FILES})
+target_link_libraries(lab_7_platformer lib_engine)
+set(EXECUTABLES ${EXECUTABLES} lab_7_platformer)
+
+add_dependencies(lab_7_platformer copy_resources)
+
+set_target_properties(lab_7_platformer 
+    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
+)
+copy_sfml_dll(lab_7_platformer)
