@@ -13,7 +13,7 @@ after cloning
 Implementing a new feature branch
 ---
 ```
-git checkout -b branch-name master
+git checkout -b branch-name develop
 ```      
 Do work as normal, then:
 ```
@@ -21,10 +21,10 @@ git add .
 git commit -m "message" 
 git push -u origin branch-name
 ```
-Merging feature branch to master
+Merging feature branch to develop
 ---
 ```
-git checkout master
+git checkout develop
 git pull
 git merge branch-name
 git push
