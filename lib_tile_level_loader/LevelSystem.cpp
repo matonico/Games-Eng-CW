@@ -4,6 +4,10 @@
 using namespace std;
 using namespace sf;
 
+Texture spritesheet;
+Texture bg;
+Sprite bgSprite;
+
 std::map<LevelSystem::Tile, sf::Color> LevelSystem::_colours{
     {WALL, Color::White}, {END, Color::Red}};
 
@@ -29,6 +33,14 @@ Vector2f LevelSystem::_offset(0.0f, 30.0f);
 vector<std::unique_ptr<sf::RectangleShape>> LevelSystem::_sprites;
 
 void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
+    if (!spritesheet.loadFromFile("res/img/oak_woods_tileset.png")) {
+        std::cerr << "Failed to load spritesheet!" << std::endl;
+    }
+    if (!bg.loadFromFile("res/img/bg.png")) {
+        std::cerr << "Failed to load bg" << std::endl;
+    }
+    bgSprite.setTexture(bg);
+    bgSprite.setScale(Vector2f(3.375, 4));
   _tileSize = tileSize;
   size_t w = 0, h = 0;
   string buffer;
@@ -82,6 +94,7 @@ void LevelSystem::buildSprites(bool optimise) {
     sf::Vector2f p;
     sf::Vector2f s;
     sf::Color c;
+    sf::IntRect spriteRect;
   };
   vector<tp> tps;
   const auto tls = Vector2f(_tileSize, _tileSize);
@@ -91,7 +104,21 @@ void LevelSystem::buildSprites(bool optimise) {
       if (t == EMPTY) {
         continue;
       }
-      tps.push_back({getTilePosition({x, y}), tls, getColor(t)});
+      else if (t == START)
+      {
+          printf("hey");
+          tp temp;
+          temp.p = getTilePosition({ x,y });
+          temp.s = tls;
+          temp.c = getColor(t);
+          temp.spriteRect = IntRect(Vector2(24, 168), Vector2(24, 24));
+          tps.push_back(temp);
+          break;
+          // FIXONICO
+      }
+      else {
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect(Vector2(144, 0), Vector2(24, 24)) });
+      }
     }
   }
 
@@ -99,7 +126,7 @@ void LevelSystem::buildSprites(bool optimise) {
 
   // If tile of the same type are next to each other,
   // We can use one large sprite instead of two.
-  if (optimise && nonempty) {
+  if (!optimise && nonempty) {
 
     vector<tp> tpo;
     tp last = tps[0];
@@ -163,7 +190,11 @@ void LevelSystem::buildSprites(bool optimise) {
     s->setSize(t.s);
     s->setFillColor(Color::Red);
     s->setFillColor(t.c);
-    // s->setFillColor(Color(rand()%255,rand()%255,rand()%255));
+    s->setTexture(&spritesheet);
+   
+    s->setTextureRect(t.spriteRect);
+   
+    //s->setFillColor(Color(rand()%255,rand()%255,rand()%255));
     _sprites.push_back(move(s));
   }
 
@@ -172,9 +203,11 @@ void LevelSystem::buildSprites(bool optimise) {
 }
 
 void LevelSystem::render(RenderWindow& window) {
+    window.draw(bgSprite);
   for (auto& t : _sprites) {
     window.draw(*t);
   }
+ 
 }
 
 LevelSystem::Tile LevelSystem::getTile(sf::Vector2ul p) {

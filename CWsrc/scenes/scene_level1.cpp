@@ -11,9 +11,13 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 
+
 void Level1Scene::Load() {
   cout << " Scene 1 Load" << endl;
+ 
+
   ls::loadLevelFile("res/levels/test.txt", 40.0f);
+
 
   auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
   ls::setOffset(Vector2f(0, ho));
