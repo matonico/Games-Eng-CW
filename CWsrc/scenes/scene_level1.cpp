@@ -1,6 +1,9 @@
 #include "scene_level1.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_enemy_turret.h"
+#include "../components/cmp_hurt_player.h"
+#include "../components/cmp_physics.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -10,7 +13,6 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player;
-
 
 void Level1Scene::Load() {
   cout << " Scene 1 Load" << endl;
@@ -30,8 +32,28 @@ void Level1Scene::Load() {
     s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(Vector2f(10.f, 15.f));
+    player->addTag("player");
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
+  }
+
+  // Create Enemy
+  {
+      auto enemy = makeEntity();
+      enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) +
+          Vector2f(0, 24));
+      // *********************************
+      // Add HurtComponent
+      auto h = enemy->addComponent<HurtComponent>();
+      // Add ShapeComponent, Red 16.f Circle
+      auto s = enemy->addComponent<ShapeComponent>();
+      s->setShape<sf::CircleShape>(16.0f);
+      s->getShape().setFillColor(Color::Green);
+      s->getShape().setOrigin(Vector2f(16.0, 16.0f));
+      enemy->addComponent<EnemyTurretComponent>();
+      // Add EnemyAIComponent
+      //enemy->addComponent<EnemyAIComponent>();
+      // *********************************
   }
 
   // Add physics colliders to level tiles.
@@ -64,6 +86,9 @@ void Level1Scene::Update(const double& dt) {
 
   if (ls::getTileAt(player->getPosition()) == ls::END) {
     Engine::ChangeScene((Scene*)&level2);
+  }
+  else if (!player->isAlive()) {
+      Engine::ChangeScene((Scene*)&level1);
   }
   Scene::Update(dt);
 }

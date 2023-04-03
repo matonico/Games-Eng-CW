@@ -5,11 +5,11 @@
 #include "scenes/scene_level3.h"
 #include "scenes/scene_menu.h"
 
-//const int gameWidth = 1920;
-//const int gameHeight = 1080;
+const int gameWidth = 1920;
+const int gameHeight = 1080;
 
-const int gameWidth = 1080;
-const int gameHeight = 720;
+//const int gameWidth = 1080;
+//const int gameHeight = 720;
 
 extern MenuScene menu;
 extern Level1Scene level1;
