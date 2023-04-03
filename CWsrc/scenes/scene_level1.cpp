@@ -1,6 +1,7 @@
 #include "scene_level1.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_player_shoot.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -25,6 +26,7 @@ void Level1Scene::Load() {
   // Create player
   {
     player = makeEntity();
+    player->addTag("player");
     player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
     auto s = player->addComponent<ShapeComponent>();
     s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
@@ -32,6 +34,7 @@ void Level1Scene::Load() {
     s->getShape().setOrigin(Vector2f(10.f, 15.f));
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
+    player->addComponent<PlayerShootComponent>();
   }
 
   // Add physics colliders to level tiles.
@@ -65,6 +68,7 @@ void Level1Scene::Update(const double& dt) {
   if (ls::getTileAt(player->getPosition()) == ls::END) {
     Engine::ChangeScene((Scene*)&level2);
   }
+ 
   Scene::Update(dt);
 }
 

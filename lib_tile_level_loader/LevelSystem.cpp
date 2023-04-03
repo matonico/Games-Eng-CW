@@ -40,7 +40,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
         std::cerr << "Failed to load bg" << std::endl;
     }
     bgSprite.setTexture(bg);
-    bgSprite.setScale(Vector2f(3.375, 4));
+    bgSprite.setScale(Vector2f(6, 7.1111111111));
   _tileSize = tileSize;
   size_t w = 0, h = 0;
   string buffer;
