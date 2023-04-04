@@ -5,7 +5,7 @@
 class HurtEnemyComponent : public Component {
 protected:
 	void fire() const;
-	std::vector<std::shared_ptr<Entity>> _enemies;
+	std::vector<std::shared_ptr<Entity>> _enemies; // Vector of entities with enemy tag
 
 public:
 	void update(double dt) override;

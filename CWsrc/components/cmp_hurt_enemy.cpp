@@ -5,24 +5,16 @@ using namespace std;
 using namespace sf;
 
 void HurtEnemyComponent::update(double dt) {
+    // loop over the enemies and check collision with bullet
     for (auto e : _enemies)
     {
-        if (length(e->getPosition() - _parent->getPosition()) < 5.0f)
+        if (length(e->getPosition() - _parent->getPosition()) < 25.0f)
         {
             e->setForDelete();
             _parent->setForDelete();
         }
     }
-
-    /*
-    if (auto pl = _player.lock()) {
-        if (length(pl->getPosition() - _parent->getPosition()) < 25.0) {
-            pl->setForDelete();
-            _parent->setForDelete();
-        }
-    }
-    */
 }
 
 HurtEnemyComponent::HurtEnemyComponent(Entity* p)
-    : Component(p), _enemies(_parent->scene->ents.find("enemy")) {}
+    : Component(p), _enemies(_parent->scene->ents.find("enemy")) {} // fill vector with enemies

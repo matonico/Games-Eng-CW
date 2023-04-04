@@ -14,7 +14,7 @@ using namespace sf;
 static shared_ptr<Entity> player;
 void Level2Scene::Load() {
   cout << "Scene 2 Load" << endl;
-  ls::loadLevelFile("res/level_2.txt", 40.0f);
+  ls::loadLevelFile("res/levels/level_2.txt", 40.0f);
   auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
   ls::setOffset(Vector2f(0, ho));
 
@@ -36,6 +36,7 @@ void Level2Scene::Load() {
   // Create Enemy
   {
     auto enemy = makeEntity();
+    enemy->addTag("enemy");
     enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) +
                        Vector2f(0, 24));
     // *********************************
