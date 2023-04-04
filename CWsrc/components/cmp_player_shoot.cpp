@@ -1,6 +1,6 @@
 #include "cmp_player_shoot.h"
 #include "cmp_player_shoot.h"
-#include "cmp_hurt_player.h"
+#include "cmp_hurt_enemy.h"
 #include "../CWsrc/game.h" // For user preferences
 #include <engine.h>
 #include "cmp_bullet.h"
@@ -24,14 +24,16 @@ void PlayerShootComponent::update(double dt)
 		shoot();
 		firetime = 0.5f;
 	}
+	/*
 	for (auto b : _parent->scene->ents.list)
 	{
 		set tags = b->getTags();
 		if (tags.find("bullet") != tags.end())
 		{
-			//
+			
 		}
 	}
+	*/
 	
 }
 
@@ -55,13 +57,13 @@ void PlayerShootComponent::shoot() const
 
 	bullet->setPosition(spawnPos);
 	// Add enemy hurt component here?
-	//bullet->addComponent<HurtComponent>();
+	bullet->addComponent<HurtEnemyComponent>();
 
 	// Shape
 	bullet->addComponent<BulletComponent>();
 	auto s = bullet->addComponent<ShapeComponent>();
 	s->setShape<sf::RectangleShape>(Vector2f(8, 8));
-	s->getShape().setFillColor(Color::Green);
+	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(8.f, 8.f));
 	
 	// Physics
