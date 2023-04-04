@@ -15,7 +15,7 @@ void EnemyTurretComponent::update(double dt) {
   static float angle = 0.f;
   angle += 1.f * dt;
 
-  _parent->setRotation(180.f + sin(angle) * 45.f);
+  //_parent->setRotation(180.f + sin(angle) * 45.f);
 }
 
 void EnemyTurretComponent::fire() const {
@@ -28,11 +28,18 @@ void EnemyTurretComponent::fire() const {
   s->setShape<sf::CircleShape>(8.f);
   s->getShape().setFillColor(Color::Red);
   s->getShape().setOrigin(Vector2f(8.f, 8.f));
-  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
-  p->setRestitution(.4f);
-  p->setFriction(.005f);
-  p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
+  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(3.f, 3.f));
+  p->setMass(1.f);
+  p->setRestitution(.0f);
+  p->setFriction(.0f);
+  p->dampen(Vector2f(0, 0));
+  
+  //p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
+  auto pl = _player.lock();
+  auto direction = normalize((_parent->getPosition()) - (pl->getPosition()));
+  p->impulse(-direction * 75.f);
+
 }
 
 EnemyTurretComponent::EnemyTurretComponent(Entity* p)
-    : Component(p), _firetime(2.f) {}
+    : Component(p), _firetime(2.f), _player(_parent->scene->ents.find("player")[0]) {}
