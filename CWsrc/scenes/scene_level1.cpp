@@ -4,6 +4,7 @@
 #include "../components/cmp_enemy_turret.h"
 #include "../components/cmp_hurt_player.h"
 #include "../components/cmp_physics.h"
+#include "../components/cmp_player_hp.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -32,6 +33,7 @@ void Level1Scene::Load() {
     s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(Vector2f(10.f, 15.f));
+    auto hp = player->addComponent<PlayerHPComponent>();
     player->addTag("player");
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));

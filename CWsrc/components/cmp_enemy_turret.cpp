@@ -28,14 +28,16 @@ void EnemyTurretComponent::fire() const {
   s->setShape<sf::CircleShape>(8.f);
   s->getShape().setFillColor(Color::Red);
   s->getShape().setOrigin(Vector2f(8.f, 8.f));
-  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
-  p->setRestitution(.4f);
-  p->setFriction(.005f);
+  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(3.f, 3.f));
+  p->setMass(1.f);
+  p->setRestitution(.0f);
+  p->setFriction(.0f);
+  p->dampen(Vector2f(0, 0));
+  
   //p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
   auto pl = _player.lock();
-  auto direction = (_parent->getPosition()) - (pl->getPosition());
-  direction = direction.normalized() * 75.f;
-  p->impulse(-direction);
+  auto direction = normalize((_parent->getPosition()) - (pl->getPosition()));
+  p->impulse(-direction * 75.f);
 
 }
 
