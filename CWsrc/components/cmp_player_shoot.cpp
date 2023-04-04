@@ -73,6 +73,7 @@ void PlayerShootComponent::shoot() const
 	p->setFriction(0.0f);
 	p->setRestitution(0.0f);
 	p->dampen(Vector2f(3, 3));
+	p->setGravityScale(0.0f);
 }
 
 PlayerShootComponent::PlayerShootComponent(Entity* p) : Component(p)
