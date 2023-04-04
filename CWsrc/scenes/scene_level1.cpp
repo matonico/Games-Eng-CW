@@ -36,7 +36,6 @@ void Level1Scene::Load() {
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(Vector2f(10.f, 15.f));
     auto hp = player->addComponent<PlayerHPComponent>();
-    player->addTag("player");
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
     player->addComponent<PlayerShootComponent>();
@@ -45,6 +44,7 @@ void Level1Scene::Load() {
   // Create Enemy
   {
       auto enemy = makeEntity();
+      enemy->addTag("enemy");
       enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) +
           Vector2f(0, 24));
       // *********************************
