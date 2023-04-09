@@ -21,9 +21,6 @@ void Renderer::render() {
     throw("No render window set! ");
   }
   while (!sprites.empty()) {
-      //if(sprites.front()==)
-     
-     // rw->setView(view);
     rw->draw(*sprites.front());
     sprites.pop();
     

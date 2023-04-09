@@ -23,7 +23,10 @@ public:
     END = 'e',
     WALL = 'w',
     ENEMY = 'n',
-    WAYPOINT = '+'
+    WAYPOINT = '+',
+    LVL1PLAT = 'p',
+    LVL1LAVA = 'l',
+    LVL1BTN = 'b'
   };
 
   static Tile getTile(sf::Vector2ul);

@@ -2,6 +2,7 @@
 #include "cmp_player_shoot.h"
 #include "cmp_hurt_enemy.h"
 #include "../CWsrc/game.h" // For user preferences
+#include "cmp_activate_btn.h"
 #include <engine.h>
 #include "cmp_bullet.h"
 #include "maths.h"
@@ -58,6 +59,7 @@ void PlayerShootComponent::shoot() const
 	bullet->setPosition(spawnPos);
 	// Add enemy hurt component here?
 	bullet->addComponent<HurtEnemyComponent>();
+	bullet->addComponent<ActivateButtonComponent>();
 
 	// Shape
 	bullet->addComponent<BulletComponent>();

@@ -8,6 +8,7 @@ public:
 	void update(double dt) override;
 	void render() override {}
 	static void resetHP();
+	int getHP();
 	explicit PlayerHPComponent(Entity* p);
 	PlayerHPComponent() = delete;
 };

@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "maths.h"
+#include "../CWsrc/game.h"
 #include "system_physics.h"
 #include "system_renderer.h"
 #include "system_resources.h"
@@ -28,8 +29,11 @@ void Loading_update(float dt, const Scene* const scn) {
     loadingTime += dt;
   }
 }
+
 void Loading_render() {
+    
   // cout << "Eng: Loading Screen Render\n";
+
   static CircleShape octagon(80, 8);
   octagon.setOrigin(Vector2f(80, 80));
   octagon.setRotation(degrees(loadingspinner));
@@ -40,6 +44,9 @@ void Loading_render() {
   t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f,0.3f));
   Renderer::queue(&t);
   Renderer::queue(&octagon);
+  
+
+   
 }
 
 float frametimes[256] = {};

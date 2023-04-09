@@ -9,7 +9,7 @@ Texture bg;
 Sprite bgSprite;
 
 std::map<LevelSystem::Tile, sf::Color> LevelSystem::_colours{
-    {WALL, Color::White}, {END, Color::Red}};
+    {WALL, {128,128,128,255}}, {END, Color::Red} };
 
 sf::Color LevelSystem::getColor(LevelSystem::Tile t) {
   auto it = _colours.find(t);
@@ -104,20 +104,20 @@ void LevelSystem::buildSprites(bool optimise) {
       if (t == EMPTY) {
         continue;
       }
-      else if (t == START)
+      else if (t == START||t==WALL)
       {
-          printf("hey");
-          tp temp;
-          temp.p = getTilePosition({ x,y });
-          temp.s = tls;
-          temp.c = getColor(t);
-          temp.spriteRect = IntRect(Vector2(24, 168), Vector2(24, 24));
-          tps.push_back(temp);
-          break;
-          // FIXONICO
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t), IntRect({ 0,0 }, { 0,0 }) });
+      }
+      else if (t == LVL1PLAT)
+      {
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t), IntRect({ 144,168 }, { 24,24 }) });
+      }
+      else if (t == LVL1LAVA)
+      {
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 360,0 }, { 24,24 }) });
       }
       else {
-          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect(Vector2(144, 0), Vector2(24, 24)) });
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 0,0 }, { 0,0 }) });
       }
     }
   }
@@ -188,13 +188,23 @@ void LevelSystem::buildSprites(bool optimise) {
     auto s = make_unique<sf::RectangleShape>();
     s->setPosition(t.p);
     s->setSize(t.s);
-    s->setFillColor(Color::Red);
-    s->setFillColor(t.c);
-    s->setTexture(&spritesheet);
    
-    s->setTextureRect(t.spriteRect);
-   
-    //s->setFillColor(Color(rand()%255,rand()%255,rand()%255));
+    if (t.spriteRect == IntRect({ 360,0 }, { 24,24 }))
+    {
+        s->setFillColor(Color::Red);
+        s->setTexture(&spritesheet);
+        s->setTextureRect(t.spriteRect);
+    }
+
+    else if (t.spriteRect != IntRect({ 0,0 }, { 0,0 }))
+    {
+        s->setTexture(&spritesheet);
+        s->setTextureRect(t.spriteRect);
+    }
+    else {
+        s->setFillColor(t.c);
+    }
+
     _sprites.push_back(move(s));
   }
 
@@ -203,7 +213,7 @@ void LevelSystem::buildSprites(bool optimise) {
 }
 
 void LevelSystem::render(RenderWindow& window) {
-    window.draw(bgSprite);
+   // window.draw(bgSprite);
   for (auto& t : _sprites) {
     window.draw(*t);
   }
