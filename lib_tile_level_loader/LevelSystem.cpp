@@ -7,6 +7,8 @@ using namespace sf;
 Texture spritesheet;
 Texture bg;
 Sprite bgSprite;
+Texture portal;
+Sprite portalSprite;
 
 std::map<LevelSystem::Tile, sf::Color> LevelSystem::_colours{
     {WALL, {128,128,128,255}}, {END, Color::Red} };
@@ -39,6 +41,10 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
     if (!bg.loadFromFile("res/img/bg.png")) {
         std::cerr << "Failed to load bg" << std::endl;
     }
+    if (!portal.loadFromFile("res/img/portal.png")) {
+        std::cerr << "failed to load portal" << std::endl;
+    }
+    portalSprite.setTexture(portal);
     bgSprite.setTexture(bg);
     bgSprite.setScale(Vector2f(6, 7.1111111111));
   _tileSize = tileSize;
@@ -115,6 +121,10 @@ void LevelSystem::buildSprites(bool optimise) {
       else if (t == LVL1LAVA)
       {
           tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 360,0 }, { 24,24 }) });
+      }
+      else if (t == END) // Portal sprite
+      {
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 1,1 }, { 1,1 }) });
       }
       else {
           tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 0,0 }, { 0,0 }) });
@@ -195,12 +205,17 @@ void LevelSystem::buildSprites(bool optimise) {
         s->setTexture(&spritesheet);
         s->setTextureRect(t.spriteRect);
     }
-
+    else if (t.spriteRect == IntRect({ 1,1 }, { 1,1 }))
+    {
+        s->setTexture(&portal);
+        
+    }
     else if (t.spriteRect != IntRect({ 0,0 }, { 0,0 }))
     {
         s->setTexture(&spritesheet);
         s->setTextureRect(t.spriteRect);
     }
+
     else {
         s->setFillColor(t.c);
     }

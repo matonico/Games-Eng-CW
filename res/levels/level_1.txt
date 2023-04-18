@@ -7,21 +7,21 @@ w   pp  p                                      w
 w    pppppppplllllllpppplllllppppppppppppp     w
 w           ppppppppp  pppppppb                w
 w           r                                  w
-w                                      s       w
-w                                 ppppp        w
-w                                      pp      w
-w                                           p  w
-wppppppppppp ppppppppppppp       ppppppppppppppw
 w                                              w
+w  ppp                             ppppp       w
+w  p pp                                pp      w
+w    ppp                                     p w
+w  ppppppppp ppppp ppppppplllllllppppppppppppppw
+w                        ppppppppp             w
 w                                              w
-w                                              w
-w                                              w
-w                                              w
-w                     lllllllllllllllll        w
-w                                              w
-w                                              w
-w                                              w
-w                                              w
-w                                              w
-w                                             ew
-wwwwwwwwwwww wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+w        p   p                                 w
+w      p   p   p    p  p    p          pp      w
+w    p           pp       p   pp  p  p         w
+wpppplllllllllllllllllllllllllllllllllllllllpp w
+w   pppppppp ppppppppppppppppppppppppppppppp   w
+w                    n                         w
+w                      pppppppppppppppppppp    w
+w                      p             n    p s  w
+w                      p ppp pppppp ppppp      w
+w e                         p      p     pp    w
+wwwwwwwwwwwwlwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
