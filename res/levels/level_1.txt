@@ -3,25 +3,25 @@ w                                        w     w
 w                                        w  n  w
 wppp         pp                          w     w
 w  pp     pp                                   w
-w   pp  p                                      w
+w   pp  p                        s             w
 w    pppppppplllllllpppplllllppppppppppppp     w
 w           ppppppppp  pppppppb                w
 w           r                                  w
 w                                              w
 w  ppp                             ppppp       w
 w  p pp                                pp      w
-w    ppp                                     p w
+w    ppp                                  c  p w
 w  ppppppppp ppppp ppppppplllllllppppppppppppppw
 w                        ppppppppp             w
 w                                              w
 w        p   p                                 w
 w      p   p   p    p  p    p          pp      w
-w    p           pp       p   pp  p  p         w
+w c  p           pp       p   pp  p  p         w
 wpppplllllllllllllllllllllllllllllllllllllllpp w
 w   pppppppp ppppppppppppppppppppppppppppppp   w
 w                    n                         w
 w                      pppppppppppppppppppp    w
-w                      p             n    p s  w
+w                      p             n    p    w
 w                      p ppp pppppp ppppp      w
-w e                         p      p     pp    w
+w e                         p      p     pp  c w
 wwwwwwwwwwwwlwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww

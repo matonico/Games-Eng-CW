@@ -126,6 +126,10 @@ void LevelSystem::buildSprites(bool optimise) {
       {
           tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 1,1 }, { 1,1 }) });
       }
+      else if (t == CHECKPT)
+      {
+          tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 1,1 }, { 1,1 }) });
+      }
       else {
           tps.push_back({ getTilePosition({x, y}), tls, getColor(t),IntRect({ 0,0 }, { 0,0 }) });
       }

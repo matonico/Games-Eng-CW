@@ -26,7 +26,8 @@ public:
     WAYPOINT = '+',
     LVL1PLAT = 'p',
     LVL1LAVA = 'l',
-    LVL1BTN = 'b'
+    LVL1BTN = 'b',
+    CHECKPT = 'c'
   };
 
   static Tile getTile(sf::Vector2ul);

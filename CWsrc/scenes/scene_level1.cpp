@@ -10,6 +10,7 @@
 #include "../components/cmp_player_hp.h"
 #include "../components/cmp_enemy_ai.h"
 #include "../components/cmp_lava.h"
+#include "../components/cmp_checkpoint.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -35,6 +36,16 @@ void Level1Scene::Load() {
   txtCmp->SetText("HP: 50");
   hpText->addTag("HP");
 
+  // Create checkpoints
+  {
+      for (int i = 0; i < 3; i++)
+      {
+          auto checkpoint = makeEntity();
+          checkpoint->addTag("checkpoint");
+          checkpoint->setPosition(ls::getTilePosition(ls::findTiles(ls::CHECKPT)[i]));
+      }
+  }
+
   // Create player
   {
     player = makeEntity();
@@ -48,7 +59,13 @@ void Level1Scene::Load() {
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
     player->addComponent<PlayerShootComponent>();
+
+    // Checkpoint component
+    player->addComponent<CheckpointComponent>();
   }
+
+ 
+
 
   // Create Enemy
   {
@@ -203,7 +220,7 @@ void Level1Scene::Update(const double& dt) {
       auto php = player->GetCompatibleComponent<PlayerHPComponent>();
       std::shared_ptr<PlayerHPComponent> hp = php.front();
 
-      txtCmp->SetText("HP: " + to_string(hp->getHP()));
+      txtCmp->SetText("HP: " + to_string(hp->getHP())+"\t\t"+"Deaths: "+to_string(hp->getDeaths()));
 
   Scene::Update(dt);
 }

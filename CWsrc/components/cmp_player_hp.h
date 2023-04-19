@@ -9,6 +9,7 @@ public:
 	void render() override {}
 	static void resetHP();
 	int getHP();
+	int getDeaths();
 	explicit PlayerHPComponent(Entity* p);
 	PlayerHPComponent() = delete;
 };
