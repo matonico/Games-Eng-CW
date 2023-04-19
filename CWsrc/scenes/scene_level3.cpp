@@ -45,7 +45,7 @@ void Level3Scene::Load() {
       s->getShape().setFillColor(Color::Green);
       s->getShape().setOrigin(Vector2f(16.0, 16.0f));
       // Add EnemyAIComponent
-      enemy->addComponent<EnemyAIComponent>();
+     // enemy->addComponent<EnemyAIComponent>();
       // *********************************
   }
   // Add physics colliders to level tiles.

@@ -70,7 +70,8 @@ void PlayerPhysicsComponent::update(double dt) {
     // disable friction while jumping
     setFriction(0.f);
   } else {
-    setFriction(0.1f);
+    //setFriction(0.1f);
+      setFriction(0.f); // idk if better
   }
 
   // Clamp velocity.

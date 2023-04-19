@@ -10,7 +10,6 @@ void CheckpointComponent::update(double dt)
     {
         if (length(e->getPosition() - _parent->getPosition()) < 25.0f)
         {
-            printf("HEYHEYHEY");
             _checkpoint = e->getPosition();
             e->setForDelete();
         }

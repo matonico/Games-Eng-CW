@@ -11,7 +11,7 @@ w                                              w
 w  ppp                             ppppp       w
 w  p pp                                pp      w
 w    ppp                                  c  p w
-w  ppppppppp ppppp ppppppplllllllppppppppppppppw
+w  ppppppppplppppplppppppplllllllppppppppppppppw
 w                        ppppppppp             w
 w                                              w
 w        p   p                                 w
