@@ -221,6 +221,8 @@ void Level1Scene::Update(const double& dt) {
       std::shared_ptr<PlayerHPComponent> hp = php.front();
 
       txtCmp->SetText("HP: " + to_string(hp->getHP())+"\t\t"+"Deaths: "+to_string(hp->getDeaths()));
+      
+      
 
   Scene::Update(dt);
 }
@@ -228,4 +230,5 @@ void Level1Scene::Update(const double& dt) {
 void Level1Scene::Render() {
   ls::render(Engine::GetWindow());
   Scene::Render();
+  
 }

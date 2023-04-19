@@ -21,21 +21,6 @@ void MenuScene::Load() {
 
   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   setLoaded(true);
 }
 
