@@ -35,7 +35,9 @@ void Level1Scene::Load() {
   txtCmp = hpText->addComponent<TextComponent>();
   txtCmp->SetText("HP: 50");
   hpText->addTag("HP");
-
+  if (gameWidth == 1080) {
+      txtCmp->setPosition(Vector2f(0, -357.f));
+  }
   // Create checkpoints
   {
       for (int i = 0; i < 3; i++)
