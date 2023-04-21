@@ -15,8 +15,6 @@ public:
 
   void SetText(const std::string& str);
 
-  void setPosition(sf::Vector2f coord);
-
   sf::Text* getText() { return &_text; }
 
 protected:

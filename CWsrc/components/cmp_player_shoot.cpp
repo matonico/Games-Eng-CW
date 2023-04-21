@@ -7,7 +7,6 @@
 #include "cmp_bullet.h"
 #include "maths.h"
 
-
 #include "SFML/Window/Keyboard.hpp"
 #include "SFML/Window/Mouse.hpp"
 #include "SFML/Graphics.hpp"
@@ -48,12 +47,8 @@ void PlayerShootComponent::shoot() const
 	//Position
 	Vector2f spawnPos = _parent->getPosition();
 
-	//Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
-	//printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
-
-
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow()); // custom view --> need to translate pixel positions to world position
-		sf::Vector2f mousePos = Engine::GetWindow().mapPixelToCoords(pixelPos);
+	Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
+	printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
 	
 	Vector2f playerToMouseNormal = normalize(mousePos - _parent->getPosition());
 	printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);

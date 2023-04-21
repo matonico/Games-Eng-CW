@@ -1,7 +1,5 @@
-#pragma once
 #include "LevelSystem.h"
 #include <fstream>
-#include "../CWsrc/game.h"
 
 using namespace std;
 using namespace sf;
@@ -232,11 +230,6 @@ void LevelSystem::buildSprites(bool optimise) {
 
 void LevelSystem::render(RenderWindow& window) {
    // window.draw(bgSprite);
-   if (gameWidth == 1080) {
-        sf::View view(sf::FloatRect(Vector2f(0, -357), Vector2f(1920, 1080)));
-        window.setView(view);
-    }
-
   for (auto& t : _sprites) {
     window.draw(*t);
   }

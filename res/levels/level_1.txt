@@ -2,8 +2,8 @@ wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 w                                        w     w
 w                                        w  n  w
 wppp         pp                          w     w
-w  pp     pp                       s           w
-w   pp  p                                      w
+w  pp     pp                                   w
+w   pp  p                        s             w
 w    pppppppplllllllpppplllllppppppppppppp     w
 w           ppppppppp  pppppppb                w
 w           r                                  w

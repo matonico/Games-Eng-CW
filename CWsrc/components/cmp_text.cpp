@@ -17,8 +17,3 @@ void TextComponent::SetText(const std::string& str) {
   _string = str;
   _text.setString(_string);
 }
-
-void TextComponent::setPosition(sf::Vector2f coord) {
-    _text.setPosition(coord);
-        
-}
