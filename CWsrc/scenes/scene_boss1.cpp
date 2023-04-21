@@ -96,7 +96,6 @@ void Boss1Scene::Load() {
 
 	// Boss 
 	{
-		Texture spritesheet;
 		boss = makeEntity();
 		boss->addTag("boss");
 		boss->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]));
