@@ -9,7 +9,7 @@ using namespace std;
 using namespace sf;
 
 
-static shared_ptr<TextComponent> backText;
+//static shared_ptr<TextComponent> backText;
 static shared_ptr<Entity> back;
 
 void SettingsScene::Load() {
@@ -27,7 +27,7 @@ void SettingsScene::Load() {
 	
 	//BackButton for now
 	back = makeEntity();
-	backText = back->addComponent<TextComponent>();
+	auto backText = back->addComponent<TextComponent>();
 	backText->SetText("Back");
 	back->addTag("Back");
 	backText->getText()->setOrigin(Vector2f(backText->getText()->getLocalBounds().width / 2.f,
@@ -40,11 +40,15 @@ void SettingsScene::Load() {
 	setLoaded(true);
 }
 void SettingsScene::Update(const double& dt) {
+	
+	auto backEnt = ents.find("Back")[0]->GetCompatibleComponent<TextComponent>();
+	shared_ptr<TextComponent>backText = backEnt.front();
+
 	if (backText->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
 		backText->getText()->setFillColor(sf::Color::Red);
 
 		if (Mouse::isButtonPressed(Mouse::Left())) {
-			Engine::ChangeScene(&menu);
+			Engine::ChangeScene((Scene*)&menu);
 		
 		}
 	}
@@ -53,7 +57,7 @@ void SettingsScene::Update(const double& dt) {
 	}
 	
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-		Engine::ChangeScene((Scene*)&menu);
+		Engine::ChangeScene((Scene*)&level1);
 		return;
 	}
 	Scene::Update(dt);
