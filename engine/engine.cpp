@@ -31,12 +31,30 @@ void Loading_update(float dt, const Scene* const scn) {
 }
 
 void Loading_render() {
-    
+   
   // cout << "Eng: Loading Screen Render\n";
     static RectangleShape loadingBar(Vector2f(33,33));
-    loadingBar.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
+    loadingBar.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.2f, 0.7f));
     loadingBar.setFillColor(Color(150, 35, 99));
-    loadingBar.scale(Vector2f(1, 1));
+
+
+    static RectangleShape loadingBarOutline(Vector2f(200, 33));
+    loadingBarOutline.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.2f, 0.7f));
+    //loadingBarOuline.setPosition(loadingBar.getPosition() + Vector2f(0, -10));
+    loadingBarOutline.setFillColor(Color(255, 255, 255));
+
+
+
+    if (loadingBar.getPoint(2).x != loadingBarOutline.getPoint(2).x)
+    {
+        loadingBar.setScale(Vector2f(loadingTime * 7, 1));
+    }
+   
+
+    static CircleShape loadingCircle(30, 6);
+    loadingCircle.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.7f, 0.3f));
+    loadingCircle.setRotation(degrees(loadingspinner));
+    loadingCircle.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
 
 
   
@@ -44,7 +62,10 @@ void Loading_render() {
   t.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
   t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f,0.3f));
   Renderer::queue(&t);
+  Renderer::queue(&loadingBarOutline);
   Renderer::queue(&loadingBar);
+  Renderer::queue(&loadingCircle);
+  
   
 
    
