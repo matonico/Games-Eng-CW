@@ -1,6 +1,6 @@
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 w                                        w     w
-w                                        w  n  w
+w   s                                   w  n   w
 wppp         pp                          w     w
 w  pp     pp                                   w
 w   pp  p                                      w
@@ -22,6 +22,6 @@ w   pppppppp ppppppppppppppppppppppppppppppp   w
 w                    n                         w
 w                      pppppppppppppppppppp    w
 w                      p             n    p    w
-w s                    p ppp pppppp ppppp      w
-w e                        p      p     pp  c  w
+w                      p ppp pppppp ppppp      w
+w e                         p      p     pp  c w
 wwwwwwwwwwwwlwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww

@@ -87,7 +87,7 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
                                                const Vector2f& size)
     : PhysicsComponent(p, true, size) {
   _size = sv2_to_bv2(size, true);
-  _maxVelocity = Vector2f(200.f, 400.f);
+  _maxVelocity = Vector2f(200.f, 700.f); // Changed max y vel so boost pads work
   _groundspeed = 30.f;
   _grounded = false;
   _body->SetSleepingAllowed(false);

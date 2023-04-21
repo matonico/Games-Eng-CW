@@ -27,7 +27,8 @@ public:
     LVL1PLAT = 'p',
     LVL1LAVA = 'l',
     LVL1BTN = 'b',
-    CHECKPT = 'c'
+    CHECKPT = 'c',
+    BOOST = 'j'
   };
 
   static Tile getTile(sf::Vector2ul);

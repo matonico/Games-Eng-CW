@@ -11,7 +11,7 @@ Texture portal;
 Sprite portalSprite;
 
 std::map<LevelSystem::Tile, sf::Color> LevelSystem::_colours{
-    {WALL, {128,128,128,255}}, {END, Color::Red} };
+    {WALL, {128,128,128,255}}, {END, Color::Red}, {BOOST,Color::Blue} };
 
 sf::Color LevelSystem::getColor(LevelSystem::Tile t) {
   auto it = _colours.find(t);
@@ -110,7 +110,7 @@ void LevelSystem::buildSprites(bool optimise) {
       if (t == EMPTY) {
         continue;
       }
-      else if (t == START||t==WALL)
+      else if (t == START||t==WALL||t==BOOST)
       {
           tps.push_back({ getTilePosition({x, y}), tls, getColor(t), IntRect({ 0,0 }, { 0,0 }) });
       }
