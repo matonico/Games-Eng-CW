@@ -79,7 +79,7 @@ void MenuScene::Update(const double& dt) {
         exitButton->getText()->setFillColor(sf::Color::Red);
         if (Mouse::isButtonPressed(Mouse::Left())) {
             Engine::GetWindow().close();
-            //return;
+            return;
         }
     }
     else {
@@ -94,7 +94,7 @@ void MenuScene::Update(const double& dt) {
       playButton->getText()->setFillColor(sf::Color::Red);
       if (Mouse::isButtonPressed(Mouse::Left())) {
           Engine::ChangeScene(&level1);
-          //return;
+          return;
       }
   }
   else {
@@ -109,7 +109,7 @@ void MenuScene::Update(const double& dt) {
       settingsButton->getText()->setFillColor(sf::Color::Red);
       if (Mouse::isButtonPressed(Mouse::Left())) {
           Engine::ChangeScene((Scene*)&settings);
-          //return;
+          return;
       }
 
   }
