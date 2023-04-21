@@ -8,6 +8,7 @@ MenuScene menu;
 Level1Scene level1;
 Level2Scene level2;
 Level3Scene level3;
+Boss1Scene boss1;
 
 int main() {
 	Engine::Start(gameWidth, gameHeight, "Game Name here", &menu);

@@ -33,17 +33,18 @@ void Loading_update(float dt, const Scene* const scn) {
 void Loading_render() {
     
   // cout << "Eng: Loading Screen Render\n";
+    static RectangleShape loadingBar(Vector2f(33,33));
+    loadingBar.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
+    loadingBar.setFillColor(Color(150, 35, 99));
+    loadingBar.scale(Vector2f(1, 1));
 
-  static CircleShape octagon(80, 8);
-  octagon.setOrigin(Vector2f(80, 80));
-  octagon.setRotation(degrees(loadingspinner));
-  octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
-  octagon.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
+
+  
   static Text t("Loading", *Resources::get<sf::Font>("Poppins-Regular.ttf"));
   t.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
   t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f,0.3f));
   Renderer::queue(&t);
-  Renderer::queue(&octagon);
+  Renderer::queue(&loadingBar);
   
 
    
