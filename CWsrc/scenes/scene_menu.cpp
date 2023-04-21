@@ -12,7 +12,7 @@ using namespace sf;
  static shared_ptr<Entity> settingsButt;
  static shared_ptr<Entity> exitButt;
  
- //Load in buttons
+ //Load in buttons githubcsicska
 void MenuScene::Load() {
   cout << "Menu Load \n";
   
