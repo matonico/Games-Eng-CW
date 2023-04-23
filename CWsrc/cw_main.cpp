@@ -5,6 +5,7 @@
 using namespace std;
 
 MenuScene menu;
+SettingsScene settings;
 Level1Scene level1;
 Level2Scene level2;
 Level3Scene level3;
