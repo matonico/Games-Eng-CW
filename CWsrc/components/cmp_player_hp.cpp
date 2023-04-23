@@ -17,7 +17,7 @@ void PlayerHPComponent::update(double dt) {
 		std::shared_ptr<PlayerPhysicsComponent> physCmp = phys.front();
 		auto chk = _parent->GetCompatibleComponent<CheckpointComponent>();
 		std::shared_ptr<CheckpointComponent> checkCmp = chk.front();
-
+		physCmp->setVelocity(Vector2f(0.0f, 0.0f));
 		physCmp->teleport(checkCmp->getCheckpoint());
 		resetHP();
 	}

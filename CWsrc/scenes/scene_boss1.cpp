@@ -92,6 +92,9 @@ void Boss1Scene::Load() {
 
 		// Boost component
 		player->addComponent<BoostComponent>();
+
+		// Adding checkpoint component so the player can spawn in again after dying
+		player->addComponent<CheckpointComponent>();
 	}
 
 	// Boss 
@@ -107,6 +110,7 @@ void Boss1Scene::Load() {
 
 		boss->addComponent<BossPhysicsComponent>(Vector2f(150.0f, 150.f));
 		boss->addComponent<BossHPComponent>();
+		boss->addComponent<HurtComponent>(110.0f);
 	}
 	{
 		bossHp = makeEntity();
@@ -143,9 +147,11 @@ void Boss1Scene::Load() {
 		}
 	}
 
+	// Create a portal but make it invisible
 	portal = makeEntity();
 	portal->setVisible(false);
 
+	// Portal styling
 	portal->setPosition(ls::getTilePosition(ls::findTiles(ls::CHECKPT)[0]));
 	auto s = portal->addComponent<ShapeComponent>();
 	s->setShape<CircleShape>(16, 4);
@@ -157,7 +163,7 @@ void Boss1Scene::Load() {
 
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	std::cout << " Boss 1 Load Done" << endl;
+	std::cout << "Boss 1 Load Done" << endl;
 
 	setLoaded(true);
 }
@@ -172,11 +178,7 @@ void Boss1Scene::UnLoad() {
 
 void Boss1Scene::Update(const double& dt) {
 
-	if (ls::getTileAt(player->getPosition()) == ls::END) {
-		Engine::ChangeScene((Scene*)&menu);
-		return;
-	}
-	else if (!player->isAlive()) {
+	if (!player->isAlive()) {
 		Engine::ChangeScene((Scene*)&boss1);
 		return;
 	}
@@ -200,12 +202,15 @@ void Boss1Scene::Update(const double& dt) {
 
 	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
 
+	/* 
+	make boss take damage manually for testing
 
 	if (spikeTime <= 0.0f && boss->isAlive())
 	{
 		boss->get_components<BossHPComponent>()[0]->getHit(10);
-		spikeTime = 0.3f;
+		spikeTime = 3.0f;
 	}
+	*/
 
 	// Set portal to visible if boss is dead and portal isn't currently visible
 	if (!boss->isAlive() && !portal->isVisible())

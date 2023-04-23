@@ -42,7 +42,7 @@ void Level2Scene::Load() {
                        Vector2f(0, 24));
     // *********************************
     // Add HurtComponent
-    auto h = enemy->addComponent<HurtComponent>();
+   // auto h = enemy->addComponent<HurtComponent>();
     // Add ShapeComponent, Red 16.f Circle
     auto s = enemy->addComponent<ShapeComponent>();
     s->setShape<sf::CircleShape>(16.0f);

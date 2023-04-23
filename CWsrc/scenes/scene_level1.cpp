@@ -80,13 +80,13 @@ void Level1Scene::Load() {
 
 
 
-	// Create Enemy
+	// Create Enemy turret
 	{
 		auto enemy = makeEntity();
 		enemy->addTag("enemy");
 		enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) +
 			Vector2f(0, 24));
-		auto h = enemy->addComponent<HurtComponent>();
+		auto h = enemy->addComponent<HurtComponent>(30.0f);
 		auto s = enemy->addComponent<ShapeComponent>();
 
 		s->setShape<sf::CircleShape>(16.0f);
@@ -102,7 +102,7 @@ void Level1Scene::Load() {
 		enemy->addTag("blade");
 		enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[2]) +
 			Vector2f(0, 24));
-		auto h = enemy->addComponent<HurtComponent>();
+		auto h = enemy->addComponent<HurtComponent>(30.0f);
 
 		auto s = enemy->addComponent<ShapeComponent>();
 		s->setShape<sf::CircleShape>(16.0f, 8);
@@ -121,7 +121,7 @@ void Level1Scene::Load() {
 		enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[1]) +
 			Vector2f(0, 24));
 
-		auto h = enemy->addComponent<HurtComponent>();
+		auto h = enemy->addComponent<HurtComponent>(30.0f);
 		auto s = enemy->addComponent<ShapeComponent>();
 		s->setShape<sf::CircleShape>(16.0f);
 		s->getShape().setFillColor(Color::Green);
@@ -227,7 +227,7 @@ void Level1Scene::Update(const double& dt) {
 		s->setShape<ConvexShape>(polygon);
 
 		auto p = spike->addComponent<PhysicsComponent>(true, Vector2f(5, 15));
-		auto h = spike->addComponent<HurtComponent>();
+		auto h = spike->addComponent<HurtComponent>(30.0f);
 
 		p->setMass(1000000000.f);
 

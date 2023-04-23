@@ -1,11 +1,13 @@
 #include "cmp_player_shoot.h"
 #include "cmp_player_shoot.h"
 #include "cmp_hurt_enemy.h"
+#include "cmp_hurt_boss.h"
 #include "../CWsrc/game.h" // For user preferences
 #include "cmp_activate_btn.h"
 #include <engine.h>
 #include "cmp_bullet.h"
 #include "maths.h"
+
 
 #include "SFML/Window/Keyboard.hpp"
 #include "SFML/Window/Mouse.hpp"
@@ -25,17 +27,6 @@ void PlayerShootComponent::update(double dt)
 		shoot();
 		firetime = 0.5f;
 	}
-	/*
-	for (auto b : _parent->scene->ents.list)
-	{
-		set tags = b->getTags();
-		if (tags.find("bullet") != tags.end())
-		{
-			
-		}
-	}
-	*/
-	
 }
 
 void PlayerShootComponent::shoot() const
@@ -48,17 +39,19 @@ void PlayerShootComponent::shoot() const
 	Vector2f spawnPos = _parent->getPosition();
 
 	Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
-	printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
+	//printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
 	
 	Vector2f playerToMouseNormal = normalize(mousePos - _parent->getPosition());
-	printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);
+	//printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);
 	playerToMouseNormal.y *=-1.0f;
 	
 	spawnPos = spawnPos + playerToMouseNormal * Vector2f( 20.0f,-30.0f );
 
 	bullet->setPosition(spawnPos);
-	// Add enemy hurt component here?
+
 	bullet->addComponent<HurtEnemyComponent>();
+	bullet->addComponent<HurtBossComponent>();
+
 	bullet->addComponent<ActivateButtonComponent>();
 
 	// Shape
