@@ -35,6 +35,14 @@ static shared_ptr<Entity> portal;
 
 void Boss1Scene::Load() {
 	std::cout << "Boss 1 Load" << endl;
+	//level1.music.stop(); // Stop level 1 music
+
+	if (!this->music.openFromFile("res/audio/boss1.wav")) { cout << "Music file not found." << endl; }
+
+	// Playing after the load screen
+	this->music.setLoop(true);
+	this->music.setVolume(50);
+
 
 	ls::loadLevelFile("res/levels/boss_1.txt", 40.0f);
 
@@ -168,6 +176,7 @@ void Boss1Scene::Load() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	std::cout << "Boss 1 Load Done" << endl;
 
+	this->music.play();
 	setLoaded(true);
 }
 
@@ -176,6 +185,7 @@ void Boss1Scene::UnLoad() {
 	player.reset();
 	boss.reset();
 	ls::unload();
+	this->music.stop();
 	Scene::UnLoad();
 }
 

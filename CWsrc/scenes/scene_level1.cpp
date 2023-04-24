@@ -13,6 +13,7 @@
 #include "../components/cmp_checkpoint.h"
 #include "../components/cmp_lifetime.h"
 #include "../game.h"
+#include "SFML/Audio.hpp"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -25,6 +26,15 @@ static shared_ptr<Entity> hpText;
 
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
+
+	menu.music.stop(); // Stop the main menu music
+	if (!this->music.openFromFile("res/audio/level1.wav")) { cout << "Music file not found." << endl; }
+
+	// Playing after the load screen
+	this->music.setLoop(true);
+	this->music.setVolume(50);
+	
+
 
 	ls::loadLevelFile("res/levels/level_1.txt", 40.0f);
 
@@ -182,7 +192,7 @@ void Level1Scene::Load() {
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	cout << " Scene 1 Load Done" << endl;
-
+	this->music.play();
 	setLoaded(true);
 }
 
@@ -190,6 +200,7 @@ void Level1Scene::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
 	player.reset();
 	ls::unload();
+	this->music.stop();
 	Scene::UnLoad();
 }
 

@@ -70,6 +70,15 @@ add_custom_command(TARGET ${MyTarget} POST_BUILD        # Adds a post-build even
         $<TARGET_FILE_DIR:${MyTarget}>)                 # <--this is out-file path
 endfunction()
 
+## Copy audio dll
+function (copy_sfml_audio_dll MyTarget )
+add_custom_command(TARGET ${MyTarget} POST_BUILD        # Adds a post-build event to MyTest
+    COMMAND ${CMAKE_COMMAND} -E copy_directory  # which executes "cmake - E copy_if_different..."
+        "${CMAKE_SOURCE_DIR}/lib/sfml/extlibs/bin/x64"      # <--this is in-file
+        $<TARGET_FILE_DIR:${MyTarget}>)                 # <--this is out-file path
+endfunction()
+
+
 ## Coursework
 file(GLOB_RECURSE SOURCES CWsrc/*.cpp CWsrc/*.h)
 file(GLOB_RECURSE CMPNTS CWsrc/components/*.cpp CWsrc/components/*.h)
@@ -85,21 +94,5 @@ set_target_properties(CWsrc
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
 copy_sfml_dll(CWsrc)
+copy_sfml_audio_dll(CWsrc)
 
-## Platformer lab to check structure
-file(GLOB_RECURSE SOURCES lab_7_platformer/*.cpp lab_7_platformer/*.h)
-file(GLOB_RECURSE CMPNTS lab_7_platformer/components/*.cpp lab_7_platformer/components/*.h)
-file(GLOB_RECURSE SCENES lab_7_platformer/scenes/*.cpp lab_7_platformer/scenes/*.h)
-add_executable(lab_7_platformer ${SOURCES} ${RESOURCE_FILES})
-source_group("components" FILES ${CMPNTS})
-source_group("resources" FILES ${RESOURCE_FILES})
-target_link_libraries(lab_7_platformer lib_engine)
-set(EXECUTABLES ${EXECUTABLES} lab_7_platformer)
-
-add_dependencies(lab_7_platformer copy_resources)
-
-set_target_properties(lab_7_platformer 
-    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
-)
-copy_sfml_dll(lab_7_platformer)

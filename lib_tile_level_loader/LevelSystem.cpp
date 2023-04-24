@@ -229,7 +229,7 @@ void LevelSystem::buildSprites(bool optimise) {
 }
 
 void LevelSystem::render(RenderWindow& window) {
-   // window.draw(bgSprite);
+  //window.draw(bgSprite);
   for (auto& t : _sprites) {
     window.draw(*t);
   }

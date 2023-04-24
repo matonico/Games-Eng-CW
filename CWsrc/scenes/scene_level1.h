@@ -1,14 +1,15 @@
 #pragma once
-
+#include <SFML\Audio\Music.hpp>
 #include "engine.h"
 
 class Level1Scene : public Scene {
 public:
-  void Load() override;
+	sf::Music music;
+	void Load() override;
 
-  void UnLoad() override;
+	void UnLoad() override;
 
-  void Update(const double& dt) override;
+	void Update(const double& dt) override;
 
-  void Render() override;
+	void Render() override;
 };
