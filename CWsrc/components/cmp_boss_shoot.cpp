@@ -10,7 +10,7 @@ void BossShootComponent::update(double dt) {
     _firetime -= dt;
     if (_firetime <= 0.f&&_parent->isAlive()) {
         fire();
-        _firetime = 1.f;
+        _firetime = 2.f;
     }
 }
 
@@ -29,11 +29,11 @@ void BossShootComponent::fire() const {
     Vector2f playerPos = _player.lock()->getPosition();
     //printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
 
-    Vector2f playerToMouseNormal = normalize(playerPos - _parent->getPosition());
+    Vector2f playerToBossNormal = normalize(playerPos - _parent->getPosition());
     //printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);
-    playerToMouseNormal.y *= -1.0f;
+    playerToBossNormal.y *= -1.0f;
 
-    spawnPos = spawnPos + playerToMouseNormal * Vector2f(75.0f, -75.0f);
+    spawnPos = spawnPos + playerToBossNormal * Vector2f(75.0f, -75.0f);
 
     bullet->setPosition(spawnPos);
 
