@@ -7,7 +7,6 @@ using namespace sf;
 
 void HurtBossComponent::update(double dt) {
 	// Check boss collision with bullet
-
 	if (length(_boss->getPosition() - _parent->getPosition()) < 110.0f)
 	{
 		_boss->get_components<BossHPComponent>()[0]->getHit(10.0f);

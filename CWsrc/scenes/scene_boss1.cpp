@@ -15,6 +15,7 @@
 #include "../components/cmp_boost.h"
 #include "../components/cmp_boss.h"
 #include "../components/cmp_boss_hp.h"
+#include "../components/cmp_boss_shoot.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -111,7 +112,9 @@ void Boss1Scene::Load() {
 		boss->addComponent<BossPhysicsComponent>(Vector2f(150.0f, 150.f));
 		boss->addComponent<BossHPComponent>();
 		boss->addComponent<HurtComponent>(110.0f);
+		boss->addComponent<BossShootComponent>();
 	}
+	// Boss hp
 	{
 		bossHp = makeEntity();
 		bossHp->setPosition(boss->getPosition() + Vector2f(0, 50));
@@ -194,11 +197,15 @@ void Boss1Scene::Update(const double& dt) {
 	}
 	// Boss hp stuff
 
-	bossHp->setPosition(boss->getPosition() + Vector2f(-95, -120));
-	int bossHpValue = boss->get_components<BossHPComponent>()[0]->getBossHP();
-	bossHp->GetCompatibleComponent<ShapeComponent>()[0]->setShape<RectangleShape>(Vector2f(bossHpValue, 10));
-	bossHp->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color::Green);
+	if (boss->isAlive())
+	{
 
+
+		bossHp->setPosition(boss->getPosition() + Vector2f(-95, -120));
+		int bossHpValue = boss->get_components<BossHPComponent>()[0]->getBossHP();
+		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->setShape<RectangleShape>(Vector2f(bossHpValue, 10));
+		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color::Green);
+	}
 
 	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
 
@@ -219,7 +226,7 @@ void Boss1Scene::Update(const double& dt) {
 	}
 	
 	// End conditions
-	if (portal->isVisible() && ls::getTileAt(player->getPosition()) == ls::CHECKPT)
+	if (portal->isVisible() && (length(player->getPosition() - portal->getPosition()) < 25.0f))
 	{
 		// This will tp to ending cutscene?
 		Engine::ChangeScene((Scene*)&menu);

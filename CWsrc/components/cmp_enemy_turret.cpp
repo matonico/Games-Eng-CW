@@ -12,9 +12,6 @@ void EnemyTurretComponent::update(double dt) {
     fire();
     _firetime = 1.f;
   }
-  static float angle = 0.f;
-  angle += 1.f * dt;
-
   //_parent->setRotation(180.f + sin(angle) * 45.f);
 }
 

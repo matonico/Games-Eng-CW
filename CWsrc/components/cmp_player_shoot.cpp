@@ -22,7 +22,7 @@ void PlayerShootComponent::update(double dt)
 	// Using firetime as a way to limit the fire rate of the player
 	static float firetime = 0.0f;
 	firetime -= dt;
-	if (firetime<=0 && Mouse::isButtonPressed(Mouse::Left()))
+	if (firetime <= 0 && Mouse::isButtonPressed(Mouse::Left()))
 	{
 		shoot();
 		firetime = 0.5f;
@@ -40,17 +40,25 @@ void PlayerShootComponent::shoot() const
 
 	Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
 	//printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
-	
+
 	Vector2f playerToMouseNormal = normalize(mousePos - _parent->getPosition());
 	//printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);
-	playerToMouseNormal.y *=-1.0f;
-	
-	spawnPos = spawnPos + playerToMouseNormal * Vector2f( 20.0f,-30.0f );
+	playerToMouseNormal.y *= -1.0f;
+
+	spawnPos = spawnPos + playerToMouseNormal * Vector2f(20.0f, -30.0f);
 
 	bullet->setPosition(spawnPos);
 
-	bullet->addComponent<HurtEnemyComponent>();
-	bullet->addComponent<HurtBossComponent>();
+	if (!_parent->scene->ents.find("enemy").empty()) 
+	{
+		bullet->addComponent<HurtEnemyComponent>();
+	}
+
+	if (!_parent->scene->ents.find("boss").empty()) // Crashes game if there is no boss and player tries to shoot
+	{
+		bullet->addComponent<HurtBossComponent>();
+	}
+
 
 	bullet->addComponent<ActivateButtonComponent>();
 
@@ -60,10 +68,10 @@ void PlayerShootComponent::shoot() const
 	s->setShape<sf::RectangleShape>(Vector2f(8, 8));
 	s->getShape().setFillColor(Color::Yellow);
 	s->getShape().setOrigin(Vector2f(8.f, 8.f));
-	
+
 	// Physics
-	auto p = bullet->addComponent<PhysicsComponent>(true,Vector2f(3,3));
-	p->setVelocity(playerToMouseNormal*333.0f);
+	auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(3, 3));
+	p->setVelocity(playerToMouseNormal * 333.0f);
 	p->setMass(0.0f);
 	p->setFriction(0.0f);
 	p->setRestitution(0.0f);
