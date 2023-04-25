@@ -3,13 +3,15 @@
 #include "cmp_physics.h"
 #include "ecm.h"
 #include "LevelSystem.h"
-
+#include "SFML/Audio.hpp"
 using namespace std;
 using namespace sf;
 
 
 class CheckpointComponent : public Component {
 protected:
+	sf::SoundBuffer _checkpointSoundBuffer;
+	sf::Sound _checkpointSound;
 	Vector2f _checkpoint = ls::getTilePosition(ls::findTiles(ls::START)[0]); // set the original checkpoint to the starting tile
 	std::vector<std::shared_ptr<Entity>> _checkpoints; // Vector of entities with checkpoint tag
 public:

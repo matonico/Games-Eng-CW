@@ -32,7 +32,7 @@ void Level1Scene::Load() {
 
 	// Playing after the load screen
 	this->music.setLoop(true);
-	this->music.setVolume(50);
+	this->music.setVolume(35); // TODO set as user preference
 	
 
 
@@ -73,7 +73,7 @@ void Level1Scene::Load() {
 		s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
 		s->getShape().setFillColor(Color::Magenta);
 		s->getShape().setOrigin(Vector2f(10.f, 15.f));
-		auto hp = player->addComponent<PlayerHPComponent>();
+		auto hp = player->addComponent<PlayerHPComponent>(false);
 
 		auto phys = player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
 

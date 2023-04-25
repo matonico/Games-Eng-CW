@@ -41,7 +41,7 @@ void Boss1Scene::Load() {
 
 	// Playing after the load screen
 	this->music.setLoop(true);
-	this->music.setVolume(50);
+	this->music.setVolume(35); // TODO set as user preference
 
 
 	ls::loadLevelFile("res/levels/boss_1.txt", 40.0f);
@@ -90,7 +90,7 @@ void Boss1Scene::Load() {
 		s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
 		s->getShape().setFillColor(Color::Magenta);
 		s->getShape().setOrigin(Vector2f(10.f, 15.f));
-		auto hp = player->addComponent<PlayerHPComponent>();
+		auto hp = player->addComponent<PlayerHPComponent>(true);
 
 		auto phys = player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
 
@@ -176,7 +176,7 @@ void Boss1Scene::Load() {
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	std::cout << "Boss 1 Load Done" << endl;
 
-	this->music.play();
+	this->music.play(); 
 	setLoaded(true);
 }
 
@@ -219,12 +219,12 @@ void Boss1Scene::Update(const double& dt) {
 
 	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
 
-	/* 
-	make boss take damage manually for testing
+	 /*
+	//make boss take damage manually for testing
 
 	if (spikeTime <= 0.0f && boss->isAlive())
 	{
-		boss->get_components<BossHPComponent>()[0]->getHit(10);
+		//boss->get_components<BossHPComponent>()[0]->getHit(10);
 		spikeTime = 3.0f;
 	}
 	*/

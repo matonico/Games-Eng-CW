@@ -1,9 +1,11 @@
 #pragma once
 #include "cmp_physics.h"
 #include <ecm.h>
+#include <SFML/Audio.hpp>
 
 class HurtEnemyComponent : public Component {
 protected:
+
 	void fire() const;
 	std::vector<std::shared_ptr<Entity>> _enemies; // Vector of entities with enemy tag
 

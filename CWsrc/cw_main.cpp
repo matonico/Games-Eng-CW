@@ -12,5 +12,5 @@ Level3Scene level3;
 Boss1Scene boss1;
 
 int main() {
-	Engine::Start(gameWidth, gameHeight, "Game Name here", &menu);
+	Engine::Start(gameWidth, gameHeight, "Game Name here", &level1);
 }

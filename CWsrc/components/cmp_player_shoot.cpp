@@ -8,7 +8,7 @@
 #include "cmp_bullet.h"
 #include "maths.h"
 
-
+#include "SFML/Audio.hpp"
 #include "SFML/Window/Keyboard.hpp"
 #include "SFML/Window/Mouse.hpp"
 #include "SFML/Graphics.hpp"
@@ -25,6 +25,9 @@ void PlayerShootComponent::update(double dt)
 	if (firetime <= 0 && Mouse::isButtonPressed(Mouse::Left()))
 	{
 		shoot();
+		//cout <<to_string( _shootSound.getDuration().asMilliseconds()) << endl;
+		_shootSound.setVolume(50);// TODO set as user preference
+		_shootSound.play();
 		firetime = 0.5f;
 	}
 }
@@ -81,5 +84,9 @@ void PlayerShootComponent::shoot() const
 
 PlayerShootComponent::PlayerShootComponent(Entity* p) : Component(p)
 {
-
+	if (!_shootSoundBuffer.loadFromFile("res/audio/shoot.wav"))
+	{	
+		cout << "cant load sound fx" << endl;
+	}
+	_shootSound.setBuffer(_shootSoundBuffer);
 }

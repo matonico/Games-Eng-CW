@@ -20,7 +20,7 @@ void MenuScene::Load() {
 	if (!this->music.openFromFile("res/audio/menu.wav")) { cout << "Music file not found." << endl; }
 
 	this->music.setLoop(true);
-	this->music.setVolume(50);
+	this->music.setVolume(35); // TODO set as user preference
 	this->music.play();
 
 	// Main title

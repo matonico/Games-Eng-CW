@@ -1,5 +1,6 @@
 #include "cmp_hurt_enemy.h"
 #include <engine.h>
+#include <SFML/Audio.hpp>
 
 using namespace std;
 using namespace sf;
@@ -17,4 +18,6 @@ void HurtEnemyComponent::update(double dt) {
 }
 
 HurtEnemyComponent::HurtEnemyComponent(Entity* p)
-    : Component(p), _enemies(_parent->scene->ents.find("enemy")) {} // fill vector with enemies
+    : Component(p), _enemies(_parent->scene->ents.find("enemy"))// fill vector with enemies
+{
+}

@@ -10,6 +10,8 @@ void BossShootComponent::update(double dt) {
     _firetime -= dt;
     if (_firetime <= 0.f&&_parent->isAlive()) {
         fire();
+        _bossShootSound.play();
+        _bossShootSound.setVolume(50);// TODO set as user preference
         _firetime = 2.f;
     }
 }
@@ -49,9 +51,16 @@ void BossShootComponent::fire() const {
     //p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));
     auto pl = _player.lock();
     auto direction = normalize((_parent->getPosition()) - (pl->getPosition()));
-    p->impulse(-direction * 30.f);
+    p->impulse(-direction * 37.f);
 
 }
 
 BossShootComponent::BossShootComponent(Entity* p)
-    : Component(p), _firetime(2.f), _player(_parent->scene->ents.find("player")[0]) {}
+    : Component(p), _firetime(2.f), _player(_parent->scene->ents.find("player")[0]) 
+{
+    if (!_bossShootSoundBuffer.loadFromFile("res/audio/boss_shoot.wav"))
+    {
+        cout << "cant load sound fx" << endl;
+    }
+    _bossShootSound.setBuffer(_bossShootSoundBuffer);
+}
