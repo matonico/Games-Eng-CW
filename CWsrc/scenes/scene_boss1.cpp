@@ -35,7 +35,6 @@ static shared_ptr<Entity> portal;
 
 void Boss1Scene::Load() {
 	std::cout << "Boss 1 Load" << endl;
-	//level1.music.stop(); // Stop level 1 music
 
 	if (!this->music.openFromFile("res/audio/boss1.wav")) { cout << "Music file not found." << endl; }
 

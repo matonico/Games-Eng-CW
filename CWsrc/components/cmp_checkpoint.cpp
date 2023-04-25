@@ -23,11 +23,11 @@ Vector2f CheckpointComponent::getCheckpoint() { return _checkpoint; }
 
 CheckpointComponent::CheckpointComponent(Entity* p) : Component(p), _checkpoints(_parent->scene->ents.find("checkpoint"))  // fill vector with checkpoints
 {
-    if (!_checkpointSoundBuffer.loadFromFile("res/audio/boost.wav"))
+    if (!_checkpointSoundBuffer.loadFromFile("res/audio/checkpoint.wav"))
     {
         cout << "cant load sound fx" << endl;
     }
     _checkpointSound.setBuffer(_checkpointSoundBuffer);
-    _checkpointSound.setVolume(50); // TODO set from user preference
+    _checkpointSound.setVolume(75); // TODO set from user preference
 }
 
