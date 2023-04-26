@@ -221,15 +221,6 @@ void Boss1Scene::Update(const double& dt) {
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->setShape<RectangleShape>(Vector2f(bossHpValue, 10));
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color::Green);
 	}
-	static float fart = 0.0f;
-	if (!boss->isAlive())
-	{
-		if (fart >= 5.0f)
-		{
-			player->get_components<PlayerHPComponent>()[0]->getHit(50);
-		}
-		fart += dt;
-	}
 
 	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
 
