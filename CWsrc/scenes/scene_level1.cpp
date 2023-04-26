@@ -23,9 +23,12 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> hpText;
+static shared_ptr<Entity> pauseMenu;
 
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
+
+	_pause = false; // Game isn't paused on load
 
 	menu.music.stop(); // Stop the main menu music
 	if (!this->music.openFromFile("res/audio/level1.wav")) { cout << "Music file not found." << endl; }
@@ -74,6 +77,8 @@ void Level1Scene::Load() {
 		s->getShape().setFillColor(Color::Magenta);
 		s->getShape().setOrigin(Vector2f(10.f, 15.f));
 		auto hp = player->addComponent<PlayerHPComponent>(false);
+		hp->resetHP();
+		hp->setDeaths(0);
 
 		auto phys = player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
 
@@ -188,6 +193,33 @@ void Level1Scene::Load() {
 			e->addComponent<LavaComponent>();
 		}
 	}
+	// Pause menu
+	pauseMenu = makeEntity();
+	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.1f, 0.1f));
+	pauseMenu->setVisible(false);
+	auto shape = pauseMenu->addComponent<ShapeComponent>();
+
+	shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.8f, 0.8f));
+	shape->getShape().setFillColor(Color{ 112,128,144 });
+
+	auto text = pauseMenu->addComponent<TextComponent>("Paused");
+	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
+	text->getText()->setCharacterSize(45);
+
+	auto exitToMenu = makeEntity();
+	exitToMenu->setVisible(false);
+	exitToMenu->addTag("ExitToMenu");
+	auto exitToMenuText = exitToMenu->addComponent<TextComponent>("Exit to Main Menu");
+	exitToMenuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.4f));
+	exitToMenuText->getText()->setCharacterSize(35);
+
+	auto exitGame = makeEntity();
+	exitGame->setVisible(false);
+	exitGame->addTag("ExitGame");
+	auto exitGameText = exitGame->addComponent<TextComponent>("Exit to Desktop");
+	exitGameText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.5f));
+	exitGameText->getText()->setCharacterSize(35);
+
 
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -205,24 +237,75 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
+	// Handling Pausing
 	static float pauseTime = 0.0f;
-	if (_pause)
+	if (_pause) // Execute this code if the game is paused
 	{
-		if (Keyboard::isKeyPressed(Keyboard::T) && pauseTime <= 0.0f)
+		if (Keyboard::isKeyPressed(Keyboard::Escape) && pauseTime <= 0.0f)
 		{
 			_pause = !_pause;
+			for (auto e : ents.list)
+			{
+				e->setVisible(true);
+			}
+			pauseMenu->setVisible(false);
+			ents.find("ExitGame")[0]->setVisible(false);
+			ents.find("ExitToMenu")[0]->setVisible(false);
+
 			pauseTime = 1.0f;
 		}
+
+		//Exit to menu button
+		auto exitToMenuEnt = ents.find("ExitToMenu")[0];
+		auto exitToMenuTextCmp = exitToMenuEnt->GetCompatibleComponent<TextComponent>()[0];
+
+		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+			exitToMenuTextCmp->getText()->setFillColor(sf::Color::Red);
+			if (Mouse::isButtonPressed(Mouse::Left())) {
+				Engine::ChangeScene(&menu);
+				return;
+			}
+		}
+		else {
+			exitToMenuTextCmp->getText()->setFillColor(sf::Color::White);
+		}
+
+		//Exit game button
+
+		auto exitGameEnt = ents.find("ExitGame")[0];
+		auto exitGameTextCmp = exitGameEnt->GetCompatibleComponent<TextComponent>()[0];
+
+		if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+			exitGameTextCmp->getText()->setFillColor(sf::Color::Red);
+			if (Mouse::isButtonPressed(Mouse::Left())) {
+				Engine::GetWindow().close();
+				return;
+			}
+		}
+		else {
+			exitGameTextCmp->getText()->setFillColor(sf::Color::White);
+		}
+
 		pauseTime -= dt;
 		return;
 	}
 
-	if (Keyboard::isKeyPressed(Keyboard::T) && pauseTime <= 0.0f)
+	if (Keyboard::isKeyPressed(Keyboard::Escape) && pauseTime <= 0.0f) // Pause the game
 	{
 		_pause = !_pause;
+		for (auto e : ents.list)
+		{
+			e->setVisible(false);
+		}
+		pauseMenu->setVisible(true);
+		ents.find("ExitGame")[0]->setVisible(true);
+		ents.find("ExitToMenu")[0]->setVisible(true);
+		
+
 		pauseTime = 1.0f;
 	}
 
+	// If player gets to the portal, change scene to boss1
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&boss1);
 		return;

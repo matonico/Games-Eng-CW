@@ -15,6 +15,7 @@ public:
 	static void resetHP();
 	int getHP();
 	int getDeaths();
+	void setDeaths(int num);
 	explicit PlayerHPComponent(Entity* p, bool bossLvl);
 	PlayerHPComponent() = delete;
 };

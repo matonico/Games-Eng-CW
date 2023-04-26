@@ -47,6 +47,11 @@ int PlayerHPComponent::getDeaths() {
 	return deaths;
 }
 
+void PlayerHPComponent::setDeaths(int num)
+{
+	deaths = num;
+}
+
 PlayerHPComponent::PlayerHPComponent(Entity* p, bool bossLvl)
 	: Component(p) 
 {

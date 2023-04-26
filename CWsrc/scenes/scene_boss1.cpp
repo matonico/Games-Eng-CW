@@ -32,6 +32,7 @@ static shared_ptr<Entity> bossText;
 static shared_ptr<Entity> bossHp;
 
 static shared_ptr<Entity> portal;
+static shared_ptr<Entity> pauseMenu;
 
 void Boss1Scene::Load() {
 	std::cout << "Boss 1 Load" << endl;
@@ -170,6 +171,33 @@ void Boss1Scene::Load() {
 	s->getShape().setFillColor(sf::Color(128, 196, 193));
 	s->getShape().setOutlineColor(sf::Color(5, 213, 245));
 
+	// Pause menu
+	pauseMenu = makeEntity();
+	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.1f, 0.1f));
+	pauseMenu->setVisible(false);
+	auto shape = pauseMenu->addComponent<ShapeComponent>();
+
+	shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize())* Vector2f(0.8f, 0.8f));
+	shape->getShape().setFillColor(Color{ 112,128,144 });
+
+	auto text = pauseMenu->addComponent<TextComponent>("Paused");
+	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.4f, 0.2f));
+	text->getText()->setCharacterSize(45);
+
+	auto exitToMenu = makeEntity();
+	exitToMenu->setVisible(false);
+	exitToMenu->addTag("ExitToMenu");
+	auto exitToMenuText = exitToMenu->addComponent<TextComponent>("Exit to Main Menu");
+	exitToMenuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.4f, 0.4f));
+	exitToMenuText->getText()->setCharacterSize(35);
+
+	auto exitGame = makeEntity();
+	exitGame->setVisible(false);
+	exitGame->addTag("ExitGame");
+	auto exitGameText = exitGame->addComponent<TextComponent>("Exit to Desktop");
+	exitGameText->getText()->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.4f, 0.5f));
+	exitGameText->getText()->setCharacterSize(35);
+
 
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -183,14 +211,79 @@ void Boss1Scene::UnLoad() {
 	std::cout << "Boss 1 Unload" << endl;
 	boss.reset();
 	player.reset();
-	
 	ls::unload();
 	this->music.stop();
 	Scene::UnLoad();
 }
 
 void Boss1Scene::Update(const double& dt) {
+	// Handling Pausing
+	static float pauseTime = 0.0f;
+	if (_pause) // Execute this code if the game is paused
+	{
+		if (Keyboard::isKeyPressed(Keyboard::Escape) && pauseTime <= 0.0f)
+		{
+			_pause = !_pause;
+			for (auto e : ents.list)
+			{
+				e->setVisible(true);
+			}
+			pauseMenu->setVisible(false);
+			ents.find("ExitGame")[0]->setVisible(false);
+			ents.find("ExitToMenu")[0]->setVisible(false);
 
+			pauseTime = 1.0f;
+		}
+
+		//Exit to menu button
+		auto exitToMenuEnt = ents.find("ExitToMenu")[0];
+		auto exitToMenuTextCmp = exitToMenuEnt->GetCompatibleComponent<TextComponent>()[0];
+
+		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+			exitToMenuTextCmp->getText()->setFillColor(sf::Color::Red);
+			if (Mouse::isButtonPressed(Mouse::Left())) {
+				Engine::ChangeScene(&menu);
+				return;
+			}
+		}
+		else {
+			exitToMenuTextCmp->getText()->setFillColor(sf::Color::White);
+		}
+
+		//Exit game button
+
+		auto exitGameEnt = ents.find("ExitGame")[0];
+		auto exitGameTextCmp = exitGameEnt->GetCompatibleComponent<TextComponent>()[0];
+
+		if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+			exitGameTextCmp->getText()->setFillColor(sf::Color::Red);
+			if (Mouse::isButtonPressed(Mouse::Left())) {
+				Engine::GetWindow().close();
+				return;
+			}
+		}
+		else {
+			exitGameTextCmp->getText()->setFillColor(sf::Color::White);
+		}
+
+		pauseTime -= dt;
+		return;
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Escape) && pauseTime <= 0.0f) // Pause the game
+	{
+		_pause = !_pause;
+		for (auto e : ents.list)
+		{
+			e->setVisible(false);
+		}
+		pauseMenu->setVisible(true);
+		ents.find("ExitGame")[0]->setVisible(true);
+		ents.find("ExitToMenu")[0]->setVisible(true);
+
+
+		pauseTime = 1.0f;
+	}
 	// Check to see if we should reset level. Doing it in the main scene update because doing it in the HP component causes scene to load twice somtimes
 	if (player->get_components<PlayerHPComponent>()[0]->getHP()<=0) {
 
@@ -233,6 +326,7 @@ void Boss1Scene::Update(const double& dt) {
 		Engine::ChangeScene((Scene*)&menu);
 		return;
 	}
+	pauseTime -= dt;
 
 	Scene::Update(dt);
 }
