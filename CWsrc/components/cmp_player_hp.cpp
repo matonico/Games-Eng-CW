@@ -27,12 +27,6 @@ void PlayerHPComponent::update(double dt) {
 			physCmp->teleport(checkCmp->getCheckpoint());
 			resetHP();
 		}
-		else {
-			// If boss level, reset player hp, boss hp and reload the level.
-			resetHP();
-			_parent->scene->ents.find("boss")[0]->get_components<BossHPComponent>()[0]->resetHP(); 
-			_parent->setForDelete();
-		}
 	}
 }
 

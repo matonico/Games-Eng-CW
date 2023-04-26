@@ -181,8 +181,9 @@ void Boss1Scene::Load() {
 
 void Boss1Scene::UnLoad() {
 	std::cout << "Boss 1 Unload" << endl;
-	player.reset();
 	boss.reset();
+	player.reset();
+	
 	ls::unload();
 	this->music.stop();
 	Scene::UnLoad();
@@ -190,7 +191,12 @@ void Boss1Scene::UnLoad() {
 
 void Boss1Scene::Update(const double& dt) {
 
-	if (!player->isAlive()) {
+	// Check to see if we should reset level. Doing it in the main scene update because doing it in the HP component causes scene to load twice somtimes
+	if (player->get_components<PlayerHPComponent>()[0]->getHP()<=0) {
+
+		player->get_components<PlayerHPComponent>()[0]->resetHP();
+		boss->get_components<BossHPComponent>()[0]->resetHP();
+
 		Engine::ChangeScene((Scene*)&boss1);
 		return;
 	}
@@ -214,6 +220,15 @@ void Boss1Scene::Update(const double& dt) {
 		int bossHpValue = boss->get_components<BossHPComponent>()[0]->getBossHP();
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->setShape<RectangleShape>(Vector2f(bossHpValue, 10));
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color::Green);
+	}
+	static float fart = 0.0f;
+	if (!boss->isAlive())
+	{
+		if (fart >= 5.0f)
+		{
+			player->get_components<PlayerHPComponent>()[0]->getHit(50);
+		}
+		fart += dt;
 	}
 
 	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
