@@ -33,7 +33,7 @@ void Level1Scene::Load() {
 	// Playing after the load screen
 	this->music.setLoop(true);
 	this->music.setVolume(35); // TODO set as user preference
-	
+
 
 
 	ls::loadLevelFile("res/levels/level_1.txt", 40.0f);
@@ -205,6 +205,23 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
+	static float pauseTime = 0.0f;
+	if (_pause)
+	{
+		if (Keyboard::isKeyPressed(Keyboard::T) && pauseTime <= 0.0f)
+		{
+			_pause = !_pause;
+			pauseTime = 1.0f;
+		}
+		pauseTime -= dt;
+		return;
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::T) && pauseTime <= 0.0f)
+	{
+		_pause = !_pause;
+		pauseTime = 1.0f;
+	}
 
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&boss1);
@@ -246,8 +263,10 @@ void Level1Scene::Update(const double& dt) {
 	string hp = to_string(player->get_components<PlayerHPComponent>()[0]->getHP());
 	string deaths = to_string(player->get_components<PlayerHPComponent>()[0]->getDeaths());
 
-	
+
 	hpText->get_components<TextComponent>()[0]->SetText("HP: " + hp + "\t\t" + "Deaths: " + deaths);
+
+	pauseTime -= dt;
 
 	Scene::Update(dt);
 }

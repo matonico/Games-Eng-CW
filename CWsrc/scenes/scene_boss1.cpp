@@ -208,25 +208,11 @@ void Boss1Scene::Update(const double& dt) {
 
 	if (boss->isAlive())
 	{
-
-
 		bossHp->setPosition(boss->getPosition() + Vector2f(-95, -120));
 		int bossHpValue = boss->get_components<BossHPComponent>()[0]->getBossHP();
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->setShape<RectangleShape>(Vector2f(bossHpValue, 10));
 		bossHp->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color::Green);
 	}
-
-	//printf("Boss HP: %i\n", boss->get_components<BossHPComponent>()[0]->getBossHP());
-
-	 /*
-	//make boss take damage manually for testing
-
-	if (spikeTime <= 0.0f && boss->isAlive())
-	{
-		//boss->get_components<BossHPComponent>()[0]->getHit(10);
-		spikeTime = 3.0f;
-	}
-	*/
 
 	// Set portal to visible if boss is dead and portal isn't currently visible
 	if (!boss->isAlive() && !portal->isVisible())

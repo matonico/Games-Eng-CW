@@ -30,7 +30,11 @@ void PlayerHPComponent::update(double dt) {
 		else {
 			// If boss level, reset player hp, boss hp and reload the level.
 			resetHP();
-			_parent->scene->ents.find("boss")[0]->get_components<BossHPComponent>()[0]->resetHP(); 
+			/*
+			if (_parent->scene->ents.find("boss").size()>0) { // Need this check or game crashes if you die after the boss died
+				_parent->scene->ents.find("boss")[0]->get_components<BossHPComponent>()[0]->resetHP();
+			}
+				*/
 			_parent->setForDelete();
 		}
 	}

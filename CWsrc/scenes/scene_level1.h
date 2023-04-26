@@ -5,6 +5,7 @@
 class Level1Scene : public Scene {
 public:
 	sf::Music music;
+	bool _pause = false;
 	void Load() override;
 
 	void UnLoad() override;
