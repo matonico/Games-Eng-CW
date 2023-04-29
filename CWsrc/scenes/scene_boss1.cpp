@@ -161,6 +161,7 @@ void Boss1Scene::Load() {
 	// Create a portal but make it invisible
 	portal = makeEntity();
 	portal->setVisible(false);
+	portal->addTag("Portal");
 
 	// Portal styling
 	portal->setPosition(ls::getTilePosition(ls::findTiles(ls::CHECKPT)[0]));
@@ -228,6 +229,7 @@ void Boss1Scene::Update(const double& dt) {
 			{
 				e->setVisible(true);
 			}
+			ents.find("Portal")[0]->setVisible(false); // make sure portal isn't made visible when pausing
 			pauseMenu->setVisible(false);
 			ents.find("ExitGame")[0]->setVisible(false);
 			ents.find("ExitToMenu")[0]->setVisible(false);
