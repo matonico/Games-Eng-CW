@@ -75,9 +75,14 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
 	if (!level1Bg.loadFromFile("res/img/level1Bg.png")) {
 		std::cerr << "Failed to load bg texture" << std::endl;
 	}
+	if (!boss1Bg.loadFromFile("res/img/bossBg.png")) {
+		std::cerr << "Failed to load bg texture" << std::endl;
+	}
 
 	hubBgSprite.setTexture(hubBg);
 	level1BgSprite.setTexture(level1Bg);
+	boss1BgSprite.setTexture(boss1Bg);
+
 	bluePortalSprite.setTexture(bluePortal);
 	redPortalSprite.setTexture(redPortal);
 	yellowPortalSprite.setTexture(yellowPortal);
@@ -308,6 +313,7 @@ void LevelSystem::buildSprites(bool optimise) {
 void LevelSystem::render(RenderWindow& window,int scene) {
 	if (scene == 1) { window.draw(hubBgSprite); } // Draw the space bg on the hub level
 	else if (scene == 2) { window.draw(level1BgSprite); }
+	else if (scene == 3) { window.draw(boss1BgSprite); }
 	for (auto& t : _sprites) {
 		window.draw(*t);
 	}
