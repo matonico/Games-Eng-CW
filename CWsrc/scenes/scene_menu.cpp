@@ -1,10 +1,13 @@
 #include "scene_menu.h"
+#include "LevelSystem.h"
 #include "../components/cmp_text.h"
+#include "../components/cmp_sprite.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include "SFML/Window/Mouse.hpp"
 #include "SFML/Audio.hpp"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -13,9 +16,45 @@ static shared_ptr<Entity> playButt;
 static shared_ptr<Entity> settingsButt;
 static shared_ptr<Entity> exitButt;
 
+
 //Load in buttons
 void MenuScene::Load() {
 	cout << "Menu Load \n";
+
+	// Background 1
+	{
+		Texture bgTex;
+		auto bg = makeEntity();
+		if (!bgTex.loadFromFile("res/img/menuBg.png")) {
+			std::cerr << "Failed to load spritesheet!" << std::endl;
+		}
+		Sprite bgSprite;
+		bgSprite.setTexture(bgTex);
+		auto bgCmp = bg->addComponent<SpriteComponent>();
+
+		bgCmp->setTexure(make_shared<Texture>(bgTex));
+		sf::Vector2f targetSize(gameWidth, gameHeight);
+		float width = bgCmp->getSprite().getLocalBounds().width;
+		float height = bgCmp->getSprite().getLocalBounds().height;
+		bgCmp->getSprite().setScale(Vector2f(targetSize.x / width, targetSize.y / height));
+	}
+	// Background 2
+	{
+		Texture bgTex;
+		auto bg = makeEntity();
+		if (!bgTex.loadFromFile("res/img/planets.png")) {
+			std::cerr << "Failed to load spritesheet!" << std::endl;
+		}
+		auto bgCmp = bg->addComponent<SpriteComponent>();
+		bgCmp->setTexure(make_shared<Texture>(bgTex));
+
+		sf::Vector2f targetSize(gameWidth, gameHeight);
+		float width = bgCmp->getSprite().getLocalBounds().width;
+		float height = bgCmp->getSprite().getLocalBounds().height;
+		bgCmp->getSprite().setScale(Vector2f(targetSize.x / width, targetSize.y / height));
+	}
+
+
 	// Music stuff
 	if (!this->music.openFromFile("res/audio/menu.wav")) { cout << "Music file not found." << endl; }
 
@@ -26,13 +65,16 @@ void MenuScene::Load() {
 	// Main title
 	auto title = makeEntity();
 	auto menuText = title->addComponent<TextComponent>();
-	menuText->SetText("Platformer Game");
+	menuText->SetText("The Defence of Jola Prime");
 	title->addTag("Title");
 	menuText->getText()->setOrigin(Vector2f(menuText->getText()->getLocalBounds().width / 2.f,
 		menuText->getText()->getLocalBounds().height / 2.f));
 
-	menuText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2 - 350.f)));
-	menuText->getText()->setCharacterSize(45);
+	menuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
+	menuText->getText()->setCharacterSize(65);
+	menuText->getText()->setFillColor(Color(180, 26, 20));
+	menuText->getText()->setOutlineColor(Color::Black);
+	menuText->getText()->setOutlineThickness(1);
 
 	// Play button
 	playButt = makeEntity();
@@ -67,6 +109,9 @@ void MenuScene::Load() {
 	exitText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2) + 200.f));
 	exitText->getText()->setCharacterSize(35);
 
+
+
+
 	setLoaded(true);
 }
 
@@ -100,7 +145,7 @@ void MenuScene::Update(const double& dt) {
 	if (playButton->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
 		playButton->getText()->setFillColor(sf::Color::Red);
 		if (Mouse::isButtonPressed(Mouse::Left())) {
-			Engine::ChangeScene(&level1);
+			Engine::ChangeScene(&hub);
 			return;
 		}
 	}

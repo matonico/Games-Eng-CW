@@ -234,7 +234,7 @@ void Boss1Scene::Update(const double& dt) {
 			ents.find("ExitGame")[0]->setVisible(false);
 			ents.find("ExitToMenu")[0]->setVisible(false);
 
-			pauseTime = 1.0f;
+			pauseTime = 0.5f;
 		}
 
 		//Exit to menu button
@@ -334,6 +334,6 @@ void Boss1Scene::Update(const double& dt) {
 }
 
 void Boss1Scene::Render() {
-	ls::render(Engine::GetWindow());
+	ls::render(Engine::GetWindow(),3);
 	Scene::Render();
 }

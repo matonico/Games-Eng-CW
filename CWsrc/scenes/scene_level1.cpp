@@ -30,14 +30,11 @@ void Level1Scene::Load() {
 
 	_pause = false; // Game isn't paused on load
 
-	menu.music.stop(); // Stop the main menu music
 	if (!this->music.openFromFile("res/audio/level1.wav")) { cout << "Music file not found." << endl; }
 
 	// Playing after the load screen
 	this->music.setLoop(true);
 	this->music.setVolume(35); // TODO set as user preference
-
-
 
 	ls::loadLevelFile("res/levels/level_1.txt", 40.0f);
 
@@ -252,7 +249,7 @@ void Level1Scene::Update(const double& dt) {
 			ents.find("ExitGame")[0]->setVisible(false);
 			ents.find("ExitToMenu")[0]->setVisible(false);
 
-			pauseTime = 1.0f;
+			pauseTime = 0.5f;
 		}
 
 		//Exit to menu button
@@ -302,7 +299,7 @@ void Level1Scene::Update(const double& dt) {
 		ents.find("ExitToMenu")[0]->setVisible(true);
 		
 
-		pauseTime = 1.0f;
+		pauseTime = 0.5f;
 	}
 
 	// If player gets to the portal, change scene to boss1
@@ -355,6 +352,6 @@ void Level1Scene::Update(const double& dt) {
 }
 
 void Level1Scene::Render() {
-	ls::render(Engine::GetWindow());
+	ls::render(Engine::GetWindow(),2);
 	Scene::Render();
 }

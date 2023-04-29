@@ -7,10 +7,9 @@ using namespace std;
 MenuScene menu;
 SettingsScene settings;
 Level1Scene level1;
-Level2Scene level2;
-Level3Scene level3;
+HubScene hub;
 Boss1Scene boss1;
 
 int main() {
-	Engine::Start(gameWidth, gameHeight, "Game Name here", &boss1);
+	Engine::Start(gameWidth, gameHeight, "The Defence of Jola Prime", &menu);
 }
