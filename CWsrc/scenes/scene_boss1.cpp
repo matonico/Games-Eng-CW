@@ -91,6 +91,8 @@ void Boss1Scene::Load() {
 		s->getShape().setFillColor(Color::Magenta);
 		s->getShape().setOrigin(Vector2f(10.f, 15.f));
 		auto hp = player->addComponent<PlayerHPComponent>(true);
+		hp->resetHP();
+		
 
 		auto phys = player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
 
