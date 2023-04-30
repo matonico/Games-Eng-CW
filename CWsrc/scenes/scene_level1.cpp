@@ -44,6 +44,7 @@ void Level1Scene::Load() {
 	hpText = makeEntity();
 	auto txtCmp = hpText->addComponent<TextComponent>();
 	txtCmp->SetText("HP: 50");
+	txtCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.0f, 0.0f));
 	hpText->addTag("HP");
 
 	// Create checkpoints

@@ -74,7 +74,7 @@ void HubScene::Load() {
 		}
 		spriteCmp->setTexure(npcTex);
 		spriteCmp->getSprite().setTextureRect(IntRect({ 0,0 }, { 32,32 }));
-		
+
 		spriteCmp->getSprite().setScale(Vector2f(1.5, 1.5));
 
 		auto pos = ls::getTilePosition(ls::findTiles(ls::NPC)[0]);
@@ -84,7 +84,53 @@ void HubScene::Load() {
 		e->addComponent<PhysicsComponent>(false, Vector2f(32.f, 32.f));
 		e->addTag("wall");
 	}
+	// Other npc yellow sign
+	{
+		npc = makeEntity();
+		npc->addTag("npc2");
+		npc->setPosition(ls::getTilePosition(ls::findTiles(ls::NPC)[1]));
+		auto spriteCmp = npc->addComponent<SpriteComponent>();
+		shared_ptr<Texture> npcTex = make_shared<Texture>();
+		if (!npcTex->loadFromFile("res/img/npc.png")) {
+			std::cerr << "Failed to load spritesheet!" << std::endl;
+		}
+		spriteCmp->setTexure(npcTex);
+		spriteCmp->getSprite().setTextureRect(IntRect({ 0,0 }, { 32,32 }));
+		spriteCmp->getSprite().setColor(Color::Yellow);
 
+		spriteCmp->getSprite().setScale(Vector2f(1.5, 1.5));
+
+		auto pos = ls::getTilePosition(ls::findTiles(ls::NPC)[1]);
+		pos += Vector2f(16.f, 16.f); //offset to center
+		auto e = makeEntity();
+		e->setPosition(pos);
+		e->addComponent<PhysicsComponent>(false, Vector2f(32.f, 32.f));
+		e->addTag("wall");
+	}
+	// Lava sign
+	{
+		auto lavaSign = makeEntity();
+		lavaSign->addTag("lavaSign");
+		lavaSign->setPosition(ls::getTilePosition(ls::findTiles(ls::SIGN)[0]));
+	}
+	// Green sign
+	{
+		auto greenSign = makeEntity();
+		greenSign->addTag("greenSign");
+		greenSign->setPosition(ls::getTilePosition(ls::findTiles(ls::SIGN)[1]));
+	}
+	// Yellow sign
+	{
+		auto yellowSign = makeEntity();
+		yellowSign->addTag("yellowSign");
+		yellowSign->setPosition(ls::getTilePosition(ls::findTiles(ls::SIGN)[2]));
+	}
+	// Blue sign
+	{
+		auto blueSign = makeEntity();
+		blueSign->addTag("blueSign");
+		blueSign->setPosition(ls::getTilePosition(ls::findTiles(ls::SIGN)[3]));
+	}
 	// Add physics colliders to level tiles.
 	{
 		auto walls = ls::findTiles(ls::WALL);
@@ -141,9 +187,42 @@ void HubScene::Load() {
 	auto npcText = makeEntity();
 	npcText->setVisible(false);
 	npcText->addTag("npcText");
-	auto npcTextCmp = npcText->addComponent<TextComponent>("Please help us...\nObsidiaani roams in the lava world.");
+	auto npcTextCmp = npcText->addComponent<TextComponent>("Please help us...\nObsidiaani roams in the Lava World.");
 	npcTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.05f, 0.1f));
 	npcTextCmp->getText()->setCharacterSize(25);
+
+	auto npc2Text = makeEntity();
+	npc2Text->setVisible(false);
+	npc2Text->addTag("npc2Text");
+	auto npc2TextCmp = npc2Text->addComponent<TextComponent>("You might need to come back later\nto get to the Thunder World");
+	npc2TextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.7f, 0.85f));
+	npc2TextCmp->getText()->setCharacterSize(25);
+
+	// Lava world sign text
+	auto lavaSignText = makeEntity();
+	lavaSignText->setVisible(false);
+	lavaSignText->addTag("lavaSignText");
+	auto lavaSignTextCmp = lavaSignText->addComponent<TextComponent>("Portal to the Lava World");
+	lavaSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.05f));
+	lavaSignTextCmp->getText()->setCharacterSize(25);
+
+	// Earth world sign text
+	auto greenSignText = makeEntity();
+	greenSignText->setVisible(false);
+	greenSignText->addTag("greenSignText");
+	auto greenSignTextCmp = greenSignText->addComponent<TextComponent>("Portal to the Earth World");
+	greenSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.8f, 0.3f));
+	greenSignTextCmp->getText()->setCharacterSize(25);
+
+	// Aqua world sign text
+	auto blueSignText = makeEntity();
+	blueSignText->setVisible(false);
+	blueSignText->addTag("blueSignText");
+	auto blueSignTextCmp = blueSignText->addComponent<TextComponent>("Portal to the Aqua World");
+	blueSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.05f, 0.85f));
+	blueSignTextCmp->getText()->setCharacterSize(25);
+
+
 
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -168,14 +247,17 @@ void HubScene::Update(const double& dt) {
 		if (Keyboard::isKeyPressed(Keyboard::Escape) && pauseTime <= 0.0f)
 		{
 			_pause = !_pause;
+
 			for (auto e : ents.list)
 			{
-				e->setVisible(true);
+				{
+					e->setVisible(true);
+				}
 			}
 			pauseMenu->setVisible(false);
 			ents.find("ExitGame")[0]->setVisible(false);
 			ents.find("ExitToMenu")[0]->setVisible(false);
-			
+
 
 			pauseTime = 0.5f;
 		}
@@ -226,6 +308,10 @@ void HubScene::Update(const double& dt) {
 		ents.find("ExitGame")[0]->setVisible(true);
 		ents.find("ExitToMenu")[0]->setVisible(true);
 		ents.find("npcText")[0]->setVisible(false);
+		ents.find("lavaSignText")[0]->setVisible(false);
+		ents.find("blueSignText")[0]->setVisible(false);
+		ents.find("greenSignText")[0]->setVisible(false);
+		ents.find("npc2Text")[0]->setVisible(false);
 
 		pauseTime = 0.5f;
 	}
@@ -240,14 +326,50 @@ void HubScene::Update(const double& dt) {
 		return;
 	}
 
-	if (length(player->getPosition() - npc->getPosition()) < 70.0f && !ents.find("npcText")[0]->isVisible()&&!pauseMenu->isVisible())
+	// Handling npc text
+	if (length(player->getPosition() - ents.find("npc")[0]->getPosition()) < 70.0f && !ents.find("npcText")[0]->isVisible() && !pauseMenu->isVisible())
 	{
 		ents.find("npcText")[0]->setVisible(true);
 	}
-	else if (length(player->getPosition() - npc->getPosition()) > 70.0f && ents.find("npcText")[0]->isVisible()) {
+	else if (length(player->getPosition() - ents.find("npc")[0]->getPosition()) > 70.0f && ents.find("npcText")[0]->isVisible()) {
 		ents.find("npcText")[0]->setVisible(false);
 	}
 
+	// Other npc text
+	if (length(player->getPosition() - ents.find("npc2")[0]->getPosition()) < 70.0f && !ents.find("npc2Text")[0]->isVisible() && !pauseMenu->isVisible())
+	{
+		ents.find("npc2Text")[0]->setVisible(true);
+	}
+	else if (length(player->getPosition() - ents.find("npc2")[0]->getPosition()) > 70.0f && ents.find("npc2Text")[0]->isVisible()) {
+		ents.find("npc2Text")[0]->setVisible(false);
+	}
+
+	// Lava Sign text
+	if (length(player->getPosition() - ents.find("lavaSign")[0]->getPosition()) < 70.0f && !ents.find("lavaSignText")[0]->isVisible() && !pauseMenu->isVisible())
+	{
+		ents.find("lavaSignText")[0]->setVisible(true);
+	}
+	else if (length(player->getPosition() - ents.find("lavaSign")[0]->getPosition()) > 70.0f && ents.find("lavaSignText")[0]->isVisible()) {
+		ents.find("lavaSignText")[0]->setVisible(false);
+	}
+
+	// Green Sign text
+	if (length(player->getPosition() - ents.find("greenSign")[0]->getPosition()) < 70.0f && !ents.find("greenSignText")[0]->isVisible() && !pauseMenu->isVisible())
+	{
+		ents.find("greenSignText")[0]->setVisible(true);
+	}
+	else if (length(player->getPosition() - ents.find("greenSign")[0]->getPosition()) > 70.0f && ents.find("greenSignText")[0]->isVisible()) {
+		ents.find("greenSignText")[0]->setVisible(false);
+	}
+
+	// Blue Sign text
+	if (length(player->getPosition() - ents.find("blueSign")[0]->getPosition()) < 70.0f && !ents.find("blueSignText")[0]->isVisible() && !pauseMenu->isVisible())
+	{
+		ents.find("blueSignText")[0]->setVisible(true);
+	}
+	else if (length(player->getPosition() - ents.find("blueSign")[0]->getPosition()) > 70.0f && ents.find("blueSignText")[0]->isVisible()) {
+		ents.find("blueSignText")[0]->setVisible(false);
+	}
 
 
 
@@ -257,6 +379,6 @@ void HubScene::Update(const double& dt) {
 }
 
 void HubScene::Render() {
-	ls::render(Engine::GetWindow(),1);
+	ls::render(Engine::GetWindow(), 1);
 	Scene::Render();
 }
