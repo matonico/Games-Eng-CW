@@ -379,6 +379,10 @@ void HubScene::Update(const double& dt) {
 }
 
 void HubScene::Render() {
+	if (gameHeight != 1080 && fullScreen != 8) {
+		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+		Engine::GetWindow().setView(view);
+	}
 	ls::render(Engine::GetWindow(), 1);
 	Scene::Render();
 }

@@ -100,6 +100,10 @@ void Engine::Update() {
 }
 
 void Engine::Render(RenderWindow& window) {
+	//sf::View view(sf::FloatRect(Vector2f(0, 0), Vector2f(1920, 1080)));
+	//window.setView(view);
+	
+
 	if (loading) {
 		Loading_render();
 	}
@@ -112,7 +116,7 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
 	const std::string& gameName, Scene* scn) {
-	RenderWindow window(VideoMode({ width, height }), gameName);
+	RenderWindow window(VideoMode({ width, height }), gameName, fullScreen);
 	_gameName = gameName;
 	_window = &window;
 	Renderer::initialise(window);

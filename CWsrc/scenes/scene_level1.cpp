@@ -28,6 +28,8 @@ static shared_ptr<Entity> pauseMenu;
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
 
+	
+
 	_pause = false; // Game isn't paused on load
 
 	if (!this->music.openFromFile("res/audio/level1.wav")) { cout << "Music file not found." << endl; }
@@ -349,10 +351,15 @@ void Level1Scene::Update(const double& dt) {
 
 	pauseTime -= dt;
 
+
 	Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
+	if (gameHeight != 1080) {
+		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+		Engine::GetWindow().setView(view);
+	}
 	ls::render(Engine::GetWindow(),2);
 	Scene::Render();
 }

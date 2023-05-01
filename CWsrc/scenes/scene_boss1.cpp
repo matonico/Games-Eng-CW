@@ -336,6 +336,10 @@ void Boss1Scene::Update(const double& dt) {
 }
 
 void Boss1Scene::Render() {
+	if (gameHeight != 1080) {
+		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+		Engine::GetWindow().setView(view);
+	}
 	ls::render(Engine::GetWindow(),3);
 	Scene::Render();
 }
