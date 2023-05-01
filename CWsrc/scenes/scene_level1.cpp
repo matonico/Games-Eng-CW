@@ -25,6 +25,7 @@ static shared_ptr<Entity> player;
 static shared_ptr<Entity> hpText;
 static shared_ptr<Entity> pauseMenu;
 static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+static sf::View view(sf::FloatRect(Vector2f(0, 0), Vector2f(1080, 720)));
 
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
@@ -287,9 +288,11 @@ void Level1Scene::UnLoad() {
 
 void Level1Scene::Update(const double& dt) {
 	//Resolution
-	if (gameHeight != 1080 && fullScreen != 8) {
+	/*if (gameHeight != 1080 && fullScreen != 8) {
 		Engine::GetWindow().setView(viewLowres);
-	}
+	}*/
+	view.setCenter(player->getPosition());
+	Engine::GetWindow().setView(view);
 	
 	// Handling Pausing
 	static float pauseTime = 0.0f;

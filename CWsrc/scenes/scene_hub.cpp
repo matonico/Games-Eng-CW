@@ -17,6 +17,7 @@ static shared_ptr<Entity> player;
 static shared_ptr<Entity> pauseMenu;
 static shared_ptr<Entity> npc;
 static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+static sf::View view(sf::FloatRect(Vector2f(0, 0), Vector2f(1080, 720)));
 
 void HubScene::Load() {
 	std::cout << "Hub load" << endl;
@@ -186,7 +187,7 @@ void HubScene::Load() {
 
 	if (gameHeight != 1080 && fullScreen != 8) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(pauseMenu->getPosition(), Engine::GetWindow().getDefaultView());
-		pauseMenu->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres))+Vector2f(300.f,0.f));
+		pauseMenu->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, view))/* + Vector2f(300.f, 0.f) */ );
 		
 		
 		/*
@@ -208,7 +209,7 @@ void HubScene::Load() {
 	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
 	if (gameHeight != 1080 && fullScreen != 8) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(text->getText()->getPosition(), Engine::GetWindow().getDefaultView());
-		text->getText()->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)));
+		text->getText()->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, view)));
 	}
 
 	text->getText()->setCharacterSize(45);
@@ -220,7 +221,7 @@ void HubScene::Load() {
 	
 	if (gameHeight != 1080 && fullScreen != 8) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitToMenuText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
-		exitToMenuText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+		exitToMenuText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, view));
 	}
 	exitToMenuText->getText()->setCharacterSize(35);
 
@@ -232,7 +233,7 @@ void HubScene::Load() {
 	
 	if (gameHeight != 1080 && fullScreen != 8) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitGameText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
-		exitGameText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+		exitGameText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, view));
 	}
 	exitGameText->getText()->setCharacterSize(35);
 
@@ -320,9 +321,14 @@ void HubScene::UnLoad() {
 
 void HubScene::Update(const double& dt) {
 	
-	if (gameHeight != 1080 && fullScreen != 8) {
+	/*if (gameHeight != 1080 && fullScreen != 8) {
 		Engine::GetWindow().setView(viewLowres);
-	}
+	}*/
+	
+   
+	view.setCenter(player->getPosition());
+	Engine::GetWindow().setView(view);
+	
 	// Handling Pausing
 	static float pauseTime = 0.0f;
 	if (_pause) // Execute this code if the game is paused
