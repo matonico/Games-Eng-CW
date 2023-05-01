@@ -77,38 +77,42 @@ void MenuScene::Load() {
 	menuText->getText()->setOutlineThickness(1);
 
 	// Play button
-	playButt = makeEntity();
-	auto playText = playButt->addComponent<TextComponent>();
-	playText->SetText("Play");
-	playButt->addTag("Play");
-	playText->getText()->setOrigin(Vector2f(playText->getText()->getLocalBounds().width / 2.f,
-		playText->getText()->getLocalBounds().height / 2.f));
+	{
+		playButt = makeEntity();
+		auto playText = playButt->addComponent<TextComponent>();
+		playText->SetText("Play");
+		playButt->addTag("Play");
+		playText->getText()->setOrigin(Vector2f(playText->getText()->getLocalBounds().width / 2.f,
+			playText->getText()->getLocalBounds().height / 2.f));
 
-	playText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2)));
-	playText->getText()->setCharacterSize(35);
-
+		playText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2)));
+		playText->getText()->setCharacterSize(35);
+	}
 	//Settings button
-	settingsButt = makeEntity();
-	auto settingsText = settingsButt->addComponent<TextComponent>();
-	settingsText->SetText("Settings");
-	settingsButt->addTag("Settings");
-	settingsText->getText()->setOrigin(Vector2f(settingsText->getText()->getLocalBounds().width / 2.f,
-		settingsText->getText()->getLocalBounds().height / 2.f));
+	{
+		settingsButt = makeEntity();
+		auto settingsText = settingsButt->addComponent<TextComponent>();
+		settingsText->SetText("Settings");
+		settingsButt->addTag("Settings");
+		settingsText->getText()->setOrigin(Vector2f(settingsText->getText()->getLocalBounds().width / 2.f,
+			settingsText->getText()->getLocalBounds().height / 2.f));
 
-	settingsText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2) + 100.f));
-	settingsText->getText()->setCharacterSize(35);
+		settingsText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2) + 100.f));
+		settingsText->getText()->setCharacterSize(35);
+	}
+	
+		//Exit button
+	{
+		exitButt = makeEntity();
+		auto exitText = exitButt->addComponent<TextComponent>();
+		exitText->SetText("Exit");
+		exitButt->addTag("Exit");
+		exitText->getText()->setOrigin(Vector2f(exitText->getText()->getLocalBounds().width / 2.f,
+			exitText->getText()->getLocalBounds().height / 2.f));
 
-	//Exit button
-	exitButt = makeEntity();
-	auto exitText = exitButt->addComponent<TextComponent>();
-	exitText->SetText("Exit");
-	exitButt->addTag("Exit");
-	exitText->getText()->setOrigin(Vector2f(exitText->getText()->getLocalBounds().width / 2.f,
-		exitText->getText()->getLocalBounds().height / 2.f));
-
-	exitText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2) + 200.f));
-	exitText->getText()->setCharacterSize(35);
-
+		exitText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2) + 200.f));
+		exitText->getText()->setCharacterSize(35);
+	}
 
 
 
@@ -169,7 +173,19 @@ void MenuScene::Update(const double& dt) {
 		settingsButton->getText()->setFillColor(sf::Color::White);
 	}
 
-
+	//handels window resizing
+	sf::Event event;
+	while (Engine::GetWindow().pollEvent(event))
+	{
+		switch (event.type) {
+		case sf::Event::Resized: {
+			sf::FloatRect visibleArea(Vector2f(0, 0),Vector2f(event.size.width, event.size.height));
+			Engine::GetWindow().setView(sf::View(visibleArea));
+			break;
+			}
+		}
+	}
+	
 
 
 	Scene::Update(dt);
