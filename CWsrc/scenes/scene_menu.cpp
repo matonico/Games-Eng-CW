@@ -21,6 +21,7 @@ static shared_ptr<Entity> exitButt;
 void MenuScene::Load() {
 	cout << "Menu Load \n";
 
+	Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
 	// Background 1
 	{
 		Texture bgTex;
@@ -124,7 +125,7 @@ void MenuScene::Update(const double& dt) {
 
 	  //left in for testing purposes
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-		Engine::ChangeScene(&menu);
+		Engine::ChangeScene(&level1);
 		return;
 	}
 	//Exit button
@@ -186,7 +187,6 @@ void MenuScene::Update(const double& dt) {
 		}
 	}
 	
-
 
 	Scene::Update(dt);
 }

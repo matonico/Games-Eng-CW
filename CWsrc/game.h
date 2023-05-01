@@ -6,6 +6,7 @@
 #include "scenes/scene_settings.h"
 
 
+
 //const int gameWidth = 1920;
 //const int gameHeight = 1080;
 
@@ -20,3 +21,5 @@ extern SettingsScene settings;
 extern Level1Scene level1;
 extern HubScene hub;
 extern Boss1Scene boss1;
+
+

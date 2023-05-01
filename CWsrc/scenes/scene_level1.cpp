@@ -24,6 +24,7 @@ using namespace sf;
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> hpText;
 static shared_ptr<Entity> pauseMenu;
+static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
 
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
@@ -48,6 +49,10 @@ void Level1Scene::Load() {
 	txtCmp->SetText("HP: 50");
 	txtCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.0f, 0.0f));
 	hpText->addTag("HP");
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
 
 	// Create checkpoints
 	{
@@ -195,22 +200,61 @@ void Level1Scene::Load() {
 	}
 	// Pause menu
 	pauseMenu = makeEntity();
-	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.1f, 0.1f));
+
+	//Resolution scaling
+	/*if (gameHeight != 1080 && fullScreen != 8) {
+		pauseMenu->setPosition(Vector2f(Engine::GetWindow().getView().getCenter()));
+	}
+	else {
+		pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.1f, 0.1f));
+	}*/
+
+	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.1f, 0.1f));
 	pauseMenu->setVisible(false);
 	auto shape = pauseMenu->addComponent<ShapeComponent>();
 
-	shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.8f, 0.8f));
+	shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize())* Vector2f(0.8f, 0.8f));
 	shape->getShape().setFillColor(Color{ 112,128,144 });
 
-	auto text = pauseMenu->addComponent<TextComponent>("Paused");
-	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
-	text->getText()->setCharacterSize(45);
 
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(pauseMenu->getPosition(), Engine::GetWindow().getDefaultView());
+		pauseMenu->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)) + Vector2f(300.f, 0.f));
+
+
+		/*
+		shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize())* Vector2f(0.9f, 0.9f));
+		shape->getShape().setFillColor(Color{ 112,128,144 });
+		shape->getShape().setOrigin(Vector2f(shape->getShape().getLocalBounds().width / 2.0f,
+											 shape->getShape().getLocalBounds().height / 2.0f));
+		pauseMenu->setPosition(Vector2f(viewLowres.getCenter()));
+		*/
+	}
+	//Resolution scaling shit
+	/*if (gameHeight != 1080 && fullScreen != 8) {
+		shape->getShape().setOrigin(Vector2f(shape->getShape().getLocalBounds().width/2.0f,
+											 shape->getShape().getLocalBounds().height/2.0f));
+	}*/
+
+	auto text = pauseMenu->addComponent<TextComponent>("Paused");
+
+	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(text->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		text->getText()->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)));
+	}
+
+	text->getText()->setCharacterSize(45);
 	auto exitToMenu = makeEntity();
 	exitToMenu->setVisible(false);
 	exitToMenu->addTag("ExitToMenu");
 	auto exitToMenuText = exitToMenu->addComponent<TextComponent>("Exit to Main Menu");
 	exitToMenuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.4f));
+
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitToMenuText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		exitToMenuText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+	}
 	exitToMenuText->getText()->setCharacterSize(35);
 
 	auto exitGame = makeEntity();
@@ -218,6 +262,11 @@ void Level1Scene::Load() {
 	exitGame->addTag("ExitGame");
 	auto exitGameText = exitGame->addComponent<TextComponent>("Exit to Desktop");
 	exitGameText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.5f));
+
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitGameText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		exitGameText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+	}
 	exitGameText->getText()->setCharacterSize(35);
 
 
@@ -237,6 +286,11 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
+	//Resolution
+	if (gameHeight != 1080 && fullScreen != 8) {
+		Engine::GetWindow().setView(viewLowres);
+	}
+	
 	// Handling Pausing
 	static float pauseTime = 0.0f;
 	if (_pause) // Execute this code if the game is paused
@@ -255,11 +309,14 @@ void Level1Scene::Update(const double& dt) {
 			pauseTime = 0.5f;
 		}
 
+		//Exit menu to scale with view
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		//Exit to menu button
 		auto exitToMenuEnt = ents.find("ExitToMenu")[0];
 		auto exitToMenuTextCmp = exitToMenuEnt->GetCompatibleComponent<TextComponent>()[0];
 
-		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+		//if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(Engine::GetWindow().mapPixelToCoords(pixelPos))) {
 			exitToMenuTextCmp->getText()->setFillColor(sf::Color::Red);
 			if (Mouse::isButtonPressed(Mouse::Left())) {
 				Engine::ChangeScene(&menu);
@@ -275,7 +332,8 @@ void Level1Scene::Update(const double& dt) {
 		auto exitGameEnt = ents.find("ExitGame")[0];
 		auto exitGameTextCmp = exitGameEnt->GetCompatibleComponent<TextComponent>()[0];
 
-		if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+		//if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+		if (exitGameTextCmp->getText()->getGlobalBounds().contains(Engine::GetWindow().mapPixelToCoords(pixelPos)) && exitGameEnt->isVisible()) {
 			exitGameTextCmp->getText()->setFillColor(sf::Color::Red);
 			if (Mouse::isButtonPressed(Mouse::Left())) {
 				Engine::GetWindow().close();
@@ -356,10 +414,7 @@ void Level1Scene::Update(const double& dt) {
 }
 
 void Level1Scene::Render() {
-	if (gameHeight != 1080) {
-		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
-		Engine::GetWindow().setView(view);
-	}
+
 	ls::render(Engine::GetWindow(),2);
 	Scene::Render();
 }

@@ -16,24 +16,32 @@ using namespace sf;
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> pauseMenu;
 static shared_ptr<Entity> npc;
+static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
 
 void HubScene::Load() {
-	cout << "Hub load" << endl;
+	std::cout << "Hub load" << endl;
 
-	_pause = false; // Game isn't paused on load
+	/*if (gameHeight != 1080 && fullScreen != 8) {
+		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+		Engine::GetWindow().setView(view);
+	}*/
 
-	menu.music.stop(); // Stop the main menu music
-	if (!this->music.openFromFile("res/audio/hub.wav")) { cout << "Music file not found." << endl; }
+	//stuff
+	{
+		_pause = false; // Game isn't paused on load
 
-	// Playing after the load screen
-	this->music.setLoop(true);
-	this->music.setVolume(35); // TODO set as user preference
+		menu.music.stop(); // Stop the main menu music
+		if (!this->music.openFromFile("res/audio/hub.wav")) { std::cout << "Music file not found." << endl; }
 
-	ls::loadLevelFile("res/levels/hub.txt", 40.0f);
+		// Playing after the load screen
+		this->music.setLoop(true);
+		this->music.setVolume(35); // TODO set as user preference
 
-	auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
-	ls::setOffset(Vector2f(0, ho));
+		ls::loadLevelFile("res/levels/hub.txt", 40.0f);
 
+		auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
+		ls::setOffset(Vector2f(0, ho));
+	}
 	// Add colliders to the boost platforms, doing it above player, because player needs a list of boost tiles for boost component
 	{
 		auto boosts = ls::findTiles(ls::BOOST);
@@ -159,22 +167,61 @@ void HubScene::Load() {
 
 	// Pause menu
 	pauseMenu = makeEntity();
-	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.1f, 0.1f));
+
+	//Resolution scaling
+	/*if (gameHeight != 1080 && fullScreen != 8) {
+		pauseMenu->setPosition(Vector2f(Engine::GetWindow().getView().getCenter()));
+	}
+	else {
+		pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.1f, 0.1f));
+	}*/
+
+	pauseMenu->setPosition(Vcast<float>(Engine::getWindowSize())* Vector2f(0.1f, 0.1f));
 	pauseMenu->setVisible(false);
 	auto shape = pauseMenu->addComponent<ShapeComponent>();
 
 	shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.8f, 0.8f));
 	shape->getShape().setFillColor(Color{ 112,128,144 });
+	
+
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(pauseMenu->getPosition(), Engine::GetWindow().getDefaultView());
+		pauseMenu->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres))+Vector2f(300.f,0.f));
+		
+		
+		/*
+		shape->setShape<RectangleShape>(Vcast<float>(Engine::getWindowSize())* Vector2f(0.9f, 0.9f));
+		shape->getShape().setFillColor(Color{ 112,128,144 });
+		shape->getShape().setOrigin(Vector2f(shape->getShape().getLocalBounds().width / 2.0f,
+											 shape->getShape().getLocalBounds().height / 2.0f));
+		pauseMenu->setPosition(Vector2f(viewLowres.getCenter()));
+		*/
+	}
+	//Resolution scaling shit
+	/*if (gameHeight != 1080 && fullScreen != 8) {
+		shape->getShape().setOrigin(Vector2f(shape->getShape().getLocalBounds().width/2.0f,
+											 shape->getShape().getLocalBounds().height/2.0f));
+	}*/
 
 	auto text = pauseMenu->addComponent<TextComponent>("Paused");
+	
 	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
-	text->getText()->setCharacterSize(45);
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(text->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		text->getText()->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)));
+	}
 
+	text->getText()->setCharacterSize(45);
 	auto exitToMenu = makeEntity();
 	exitToMenu->setVisible(false);
 	exitToMenu->addTag("ExitToMenu");
 	auto exitToMenuText = exitToMenu->addComponent<TextComponent>("Exit to Main Menu");
 	exitToMenuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.4f));
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitToMenuText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		exitToMenuText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+	}
 	exitToMenuText->getText()->setCharacterSize(35);
 
 	auto exitGame = makeEntity();
@@ -182,21 +229,38 @@ void HubScene::Load() {
 	exitGame->addTag("ExitGame");
 	auto exitGameText = exitGame->addComponent<TextComponent>("Exit to Desktop");
 	exitGameText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.5f));
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitGameText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		exitGameText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
+	}
 	exitGameText->getText()->setCharacterSize(35);
 
+	//npc1
 	auto npcText = makeEntity();
 	npcText->setVisible(false);
 	npcText->addTag("npcText");
 	auto npcTextCmp = npcText->addComponent<TextComponent>("Please help us...\nObsidiaani roams in the Lava World.");
 	npcTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.05f, 0.1f));
 	npcTextCmp->getText()->setCharacterSize(25);
-
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(npcTextCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		npcTextCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
+	
+	//npc2
 	auto npc2Text = makeEntity();
 	npc2Text->setVisible(false);
 	npc2Text->addTag("npc2Text");
 	auto npc2TextCmp = npc2Text->addComponent<TextComponent>("You might need to come back later\nto get to the Thunder World");
 	npc2TextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.7f, 0.85f));
 	npc2TextCmp->getText()->setCharacterSize(25);
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(npc2TextCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		npc2TextCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
+
 
 	// Lava world sign text
 	auto lavaSignText = makeEntity();
@@ -205,6 +269,11 @@ void HubScene::Load() {
 	auto lavaSignTextCmp = lavaSignText->addComponent<TextComponent>("Portal to the Lava World");
 	lavaSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.05f));
 	lavaSignTextCmp->getText()->setCharacterSize(25);
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(lavaSignTextCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		lavaSignTextCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
 
 	// Earth world sign text
 	auto greenSignText = makeEntity();
@@ -214,6 +283,11 @@ void HubScene::Load() {
 	greenSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.8f, 0.3f));
 	greenSignTextCmp->getText()->setCharacterSize(25);
 
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(greenSignTextCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		greenSignTextCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
+
 	// Aqua world sign text
 	auto blueSignText = makeEntity();
 	blueSignText->setVisible(false);
@@ -221,18 +295,23 @@ void HubScene::Load() {
 	auto blueSignTextCmp = blueSignText->addComponent<TextComponent>("Portal to the Aqua World");
 	blueSignTextCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.05f, 0.85f));
 	blueSignTextCmp->getText()->setCharacterSize(25);
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		auto Pixels = Engine::GetWindow().mapCoordsToPixel(blueSignTextCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+		blueSignTextCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+	}
 
 
 
 	//Simulate long loading times
 	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	cout << "Hub Load Done" << endl;
+	std::cout << "Hub Load Done" << endl;
 	this->music.play();
 	setLoaded(true);
 }
 
 void HubScene::UnLoad() {
-	cout << "Hub Unload" << endl;
+	std::cout << "Hub Unload" << endl;
 	player.reset();
 	ls::unload();
 	this->music.stop();
@@ -240,6 +319,10 @@ void HubScene::UnLoad() {
 }
 
 void HubScene::Update(const double& dt) {
+	
+	if (gameHeight != 1080 && fullScreen != 8) {
+		Engine::GetWindow().setView(viewLowres);
+	}
 	// Handling Pausing
 	static float pauseTime = 0.0f;
 	if (_pause) // Execute this code if the game is paused
@@ -261,12 +344,14 @@ void HubScene::Update(const double& dt) {
 
 			pauseTime = 0.5f;
 		}
-
+		//Exit menu to scale with view
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		//Exit to menu button
 		auto exitToMenuEnt = ents.find("ExitToMenu")[0];
 		auto exitToMenuTextCmp = exitToMenuEnt->GetCompatibleComponent<TextComponent>()[0];
 
-		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+		//if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow())))) {
+		if (exitToMenuTextCmp->getText()->getGlobalBounds().contains(Engine::GetWindow().mapPixelToCoords(pixelPos))) {
 			exitToMenuTextCmp->getText()->setFillColor(sf::Color::Red);
 			if (Mouse::isButtonPressed(Mouse::Left())) {
 				Engine::ChangeScene(&menu);
@@ -281,8 +366,9 @@ void HubScene::Update(const double& dt) {
 
 		auto exitGameEnt = ents.find("ExitGame")[0];
 		auto exitGameTextCmp = exitGameEnt->GetCompatibleComponent<TextComponent>()[0];
-
-		if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+		
+		//if (exitGameTextCmp->getText()->getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()))) && exitGameEnt->isVisible()) {
+		if (exitGameTextCmp->getText()->getGlobalBounds().contains(Engine::GetWindow().mapPixelToCoords(pixelPos)) && exitGameEnt->isVisible()) {
 			exitGameTextCmp->getText()->setFillColor(sf::Color::Red);
 			if (Mouse::isButtonPressed(Mouse::Left())) {
 				Engine::GetWindow().close();
@@ -370,19 +456,14 @@ void HubScene::Update(const double& dt) {
 	else if (length(player->getPosition() - ents.find("blueSign")[0]->getPosition()) > 70.0f && ents.find("blueSignText")[0]->isVisible()) {
 		ents.find("blueSignText")[0]->setVisible(false);
 	}
-
-
-
+	
+	
 	pauseTime -= dt;
 
 	Scene::Update(dt);
 }
 
 void HubScene::Render() {
-	if (gameHeight != 1080 && fullScreen != 8) {
-		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
-		Engine::GetWindow().setView(view);
-	}
 	ls::render(Engine::GetWindow(), 1);
 	Scene::Render();
 }

@@ -37,6 +37,8 @@ void Loading_update(float dt, const Scene* const scn) {
 
 void Loading_render() { // Loading screen with loading bar and circle spinning
 	// Set bar attributes
+	
+	
 	loadingBar.setSize(Vector2f(33, 33));
 	loadingBar.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.3f, 0.7f));
 	loadingBar.setFillColor(Color(23, 245, 129));
@@ -58,17 +60,21 @@ void Loading_render() { // Loading screen with loading bar and circle spinning
 	loadingCircle.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.7f, 0.3f));
 	loadingCircle.setRotation(degrees(loadingspinner));
 	loadingCircle.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
-
 	// Text that says loading
 	static Text t("Loading", *Resources::get<sf::Font>("Poppins-Regular.ttf"));
 	t.setFillColor(Color(255, 255, 255));
 	t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.3f));
 
+	
 	// Render all these things
 	Renderer::queue(&t);
 	Renderer::queue(&loadingBarOutline);
 	Renderer::queue(&loadingBar);
 	Renderer::queue(&loadingCircle);
+	
+	
+	
+
 }
 
 float frametimes[256] = {};
@@ -92,6 +98,7 @@ void Engine::Update() {
 
 	if (loading) {
 		Loading_update(dt, _activeScene);
+		
 	}
 	else if (_activeScene != nullptr) {
 		Physics::update(dt);
@@ -105,11 +112,15 @@ void Engine::Render(RenderWindow& window) {
 	
 
 	if (loading) {
+		window.setView(window.getDefaultView());
 		Loading_render();
+
 	}
 	else if (_activeScene != nullptr) {
 		_activeScene->Render();
 	}
+
+
 
 	Renderer::render();
 }

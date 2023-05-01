@@ -41,10 +41,12 @@ void PlayerShootComponent::shoot() const
 	//Position
 	Vector2f spawnPos = _parent->getPosition();
 
-	Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
+	//Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(Engine::GetWindow()));
+	Vector2i mousePos = sf::Mouse::getPosition(Engine::GetWindow());
 	//printf("Mouse position in window = (%f,%f)\n", mousePos.x, mousePos.y);
-
-	Vector2f playerToMouseNormal = normalize(mousePos - _parent->getPosition());
+	Vector2f realWorldPos = Engine::GetWindow().mapPixelToCoords(mousePos);
+	//Vector2f playerToMouseNormal = normalize(mousePos - _parent->getPosition());
+	Vector2f playerToMouseNormal = normalize(realWorldPos - _parent->getPosition());
 	//printf("player to mouse normal = (%f,%f)\n", playerToMouseNormal.x, playerToMouseNormal.y);
 	playerToMouseNormal.y *= -1.0f;
 
