@@ -136,7 +136,8 @@ void Boss1Scene::Load() {
 		s->getShape().setFillColor(Color::Red);
 
 		boss->addComponent<BossPhysicsComponent>(Vector2f(150.0f, 150.f));
-		boss->addComponent<BossHPComponent>();
+		auto bb = boss->addComponent<BossHPComponent>();
+		bb->resetHP();
 		boss->addComponent<HurtComponent>(110.0f);
 		boss->addComponent<BossShootComponent>();
 	}
@@ -236,7 +237,9 @@ void Boss1Scene::UnLoad() {
 }
 
 void Boss1Scene::Update(const double& dt) {
-	Engine::GetWindow().setView(viewLowres);
+	if (Engine::user_preferences.video_resolution.y != 1080) {
+		Engine::GetWindow().setView(viewLowres);
+	}
 	// Handling Pausing
 	static float pauseTime = 0.0f;
 	if (_pause) // Execute this code if the game is paused

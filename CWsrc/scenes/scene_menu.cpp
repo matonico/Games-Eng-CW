@@ -34,7 +34,8 @@ void MenuScene::Load() {
 		auto bgCmp = bg->addComponent<SpriteComponent>();
 
 		bgCmp->setTexure(make_shared<Texture>(bgTex));
-		sf::Vector2f targetSize(gameWidth, gameHeight);
+		sf::Vector2f targetSize = Engine::user_preferences.video_resolution;
+		
 		float width = bgCmp->getSprite().getLocalBounds().width;
 		float height = bgCmp->getSprite().getLocalBounds().height;
 		bgCmp->getSprite().setScale(Vector2f(targetSize.x / width, targetSize.y / height));
@@ -49,7 +50,7 @@ void MenuScene::Load() {
 		auto bgCmp = bg->addComponent<SpriteComponent>();
 		bgCmp->setTexure(make_shared<Texture>(bgTex));
 
-		sf::Vector2f targetSize(gameWidth, gameHeight);
+		sf::Vector2f targetSize = Engine::user_preferences.video_resolution;
 		float width = bgCmp->getSprite().getLocalBounds().width;
 		float height = bgCmp->getSprite().getLocalBounds().height;
 		bgCmp->getSprite().setScale(Vector2f(targetSize.x / width, targetSize.y / height));

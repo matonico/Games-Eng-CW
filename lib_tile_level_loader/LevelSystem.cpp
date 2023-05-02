@@ -14,10 +14,10 @@ Texture greenPortal;
 Sprite greenPortalSprite;
 Texture yellowPortal;
 Sprite yellowPortalSprite;
-
-
 Texture sign;
 Sprite signSprite;
+
+
 Texture hubBg;
 Sprite hubBgSprite;
 Texture level1Bg;
@@ -82,6 +82,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
 	hubBgSprite.setTexture(hubBg);
 	level1BgSprite.setTexture(level1Bg);
 	boss1BgSprite.setTexture(boss1Bg);
+
 
 	bluePortalSprite.setTexture(bluePortal);
 	redPortalSprite.setTexture(redPortal);

@@ -71,6 +71,8 @@ void HubScene::Load() {
 		player->addComponent<BoostComponent>();
 	}
 
+	
+
 	// Npc that speaks
 	{
 		npc = makeEntity();
