@@ -7,8 +7,11 @@
 
 
 
-//const int gameWidth = 1920;
-//const int gameHeight = 1080;
+const int highGameWidth = 1920;
+const int highGameHeight = 1080;
+
+const int lowGameWidth = 1280;
+const int lowGameHeight = 720;
 
 const int gameWidth = 1080;
 const int gameHeight = 720;

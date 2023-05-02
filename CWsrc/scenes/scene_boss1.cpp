@@ -34,10 +34,14 @@ static shared_ptr<Entity> bossHp;
 static shared_ptr<Entity> portal;
 static shared_ptr<Entity> pauseMenu;
 
-static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+static sf::View viewLowres(sf::FloatRect(Vector2f(0, -lowGameHeight/2), Vector2f(1920, 1080)));
 
 void Boss1Scene::Load() {
 	std::cout << "Boss 1 Load" << endl;
+	if (Engine::user_preferences.video_resolution.y != 1080 ) {
+		cout << "lowResview"<< endl;
+		Engine::GetWindow().setView(viewLowres);
+	}
 
 	if (!this->music.openFromFile("res/audio/boss1.wav")) { cout << "Music file not found." << endl; }
 
@@ -57,7 +61,7 @@ void Boss1Scene::Load() {
 		txtCmp->SetText("HP: 50");
 		hpText->addTag("HP");
 		//dirty resolution
-		if (gameHeight != 1080 && fullScreen != 8) {
+		if (Engine::user_preferences.video_resolution.y != 1080) {
 			auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 			txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
 		}
@@ -73,7 +77,7 @@ void Boss1Scene::Load() {
 		txtCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.07f));
 		bossText->addTag("BossName");
 		//dirty resolution
-		if (gameHeight != 1080 && fullScreen != 8) {
+		if (Engine::user_preferences.video_resolution.y != 1080) {
 			auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 			txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
 		}
@@ -232,6 +236,7 @@ void Boss1Scene::UnLoad() {
 }
 
 void Boss1Scene::Update(const double& dt) {
+	Engine::GetWindow().setView(viewLowres);
 	// Handling Pausing
 	static float pauseTime = 0.0f;
 	if (_pause) // Execute this code if the game is paused
@@ -348,10 +353,7 @@ void Boss1Scene::Update(const double& dt) {
 }
 
 void Boss1Scene::Render() {
-	if (gameHeight != 1080) {
-		sf::View view(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
-		Engine::GetWindow().setView(view);
-	}
+	
 	ls::render(Engine::GetWindow(),3);
 	Scene::Render();
 }

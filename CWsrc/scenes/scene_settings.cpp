@@ -4,6 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "SFML/Window/Mouse.hpp"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
 using namespace sf;
@@ -22,7 +23,7 @@ void SettingsScene::Load() {
 	settingText->getText()->setOrigin(Vector2f(settingText->getText()->getLocalBounds().width / 2.f,
 		settingText->getText()->getLocalBounds().height / 2.f));
 
-	settingText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2 - 350.f)));
+	settingText->getText()->setPosition(Vector2f((Engine::GetWindow().getView().getSize().x / 2), (Engine::GetWindow().getView().getSize().y / 2 - 350.f)));
 	settingText->getText()->setCharacterSize(45);
 
 	//BackButton for now
@@ -33,7 +34,7 @@ void SettingsScene::Load() {
 	backText->getText()->setOrigin(Vector2f(backText->getText()->getLocalBounds().width / 2.f,
 		backText->getText()->getLocalBounds().height / 2.f));
 
-	backText->getText()->setPosition(Vector2f((Engine::GetWindow().getSize().x / 2), (Engine::GetWindow().getSize().y / 2 + 350.f)));
+	backText->getText()->setPosition(Vector2f((Engine::GetWindow().getView().getSize().x / 2), (Engine::GetWindow().getView().getSize().y / 2 + 350.f)));
 	backText->getText()->setCharacterSize(45);
 
 
@@ -55,9 +56,15 @@ void SettingsScene::Update(const double& dt) {
 	else {
 		backText->getText()->setFillColor(sf::Color::White);
 	}
-
+	
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-		Engine::ChangeScene((Scene*)&level1);
+		Engine::user_preferences.fullscreen = 8;
+		//Engine::GetWindow().create(VideoMode({ gameWidth, gameHeight }), "asd", Engine::user_preferences.fullscreen);
+		return;
+	}
+
+	if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+		Engine::user_preferences.fullscreen = 7;
 		return;
 	}
 	Scene::Update(dt);

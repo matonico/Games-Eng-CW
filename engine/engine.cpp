@@ -8,12 +8,14 @@
 #include <future>
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
+
 
 using namespace sf;
 using namespace std;
 Scene* Engine::_activeScene = nullptr;
 std::string Engine::_gameName;
-
+UserPreferences Engine::user_preferences;
 static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
@@ -127,7 +129,29 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
 	const std::string& gameName, Scene* scn) {
-	RenderWindow window(VideoMode({ width, height }), gameName, fullScreen);
+	
+	ifstream preferencesFile("res/user_preferences.txt");
+	if (!preferencesFile.is_open()) {
+		cout << "File failed to open";
+		return;
+	}
+	string line;
+	string helperString;
+	while (getline(preferencesFile, line)) {
+		stringstream ss(line);
+		getline(ss, helperString, ',');
+		user_preferences.fullscreen = stoi(helperString);
+		getline(ss, helperString, ',');
+		user_preferences.video_resolution.x = stoi(helperString);
+		getline(ss, helperString, ',');
+		user_preferences.video_resolution.y = stoi(helperString);
+	}
+	preferencesFile.close();
+
+	user_preferences.video_resolution_default = Vector2f(width, height);
+	height = user_preferences.video_resolution.y;
+	width = user_preferences.video_resolution.x;
+	RenderWindow window(VideoMode({ width, height }), gameName, user_preferences.fullscreen);
 	_gameName = gameName;
 	_window = &window;
 	Renderer::initialise(window);

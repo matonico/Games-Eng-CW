@@ -17,6 +17,7 @@
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
+#include "user_preferances.h"
 
 using namespace std;
 using namespace sf;
@@ -24,11 +25,10 @@ using namespace sf;
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> hpText;
 static shared_ptr<Entity> pauseMenu;
-static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+static sf::View viewLowres(sf::FloatRect(Vector2f(0,  ( -(lowGameHeight)/2)), Vector2f(1920, 1080)));
 
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
-
 	
 
 	_pause = false; // Game isn't paused on load
@@ -49,7 +49,8 @@ void Level1Scene::Load() {
 	txtCmp->SetText("HP: 50");
 	txtCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.0f, 0.0f));
 	hpText->addTag("HP");
-	if (gameHeight != 1080 && fullScreen != 8) {
+	
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 		txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
 	}
@@ -202,7 +203,7 @@ void Level1Scene::Load() {
 	pauseMenu = makeEntity();
 
 	//Resolution scaling
-	/*if (gameHeight != 1080 && fullScreen != 8) {
+	/*if (Engine::user_preferences.video_resolution.y != 1080) {
 		pauseMenu->setPosition(Vector2f(Engine::GetWindow().getView().getCenter()));
 	}
 	else {
@@ -217,7 +218,7 @@ void Level1Scene::Load() {
 	shape->getShape().setFillColor(Color{ 112,128,144 });
 
 
-	if (gameHeight != 1080 && fullScreen != 8) {
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(pauseMenu->getPosition(), Engine::GetWindow().getDefaultView());
 		pauseMenu->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)) + Vector2f(300.f, 0.f));
 
@@ -231,7 +232,7 @@ void Level1Scene::Load() {
 		*/
 	}
 	//Resolution scaling shit
-	/*if (gameHeight != 1080 && fullScreen != 8) {
+	/*if (Engine::user_preferences.video_resolution.y != 1080) {
 		shape->getShape().setOrigin(Vector2f(shape->getShape().getLocalBounds().width/2.0f,
 											 shape->getShape().getLocalBounds().height/2.0f));
 	}*/
@@ -239,7 +240,7 @@ void Level1Scene::Load() {
 	auto text = pauseMenu->addComponent<TextComponent>("Paused");
 
 	text->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.2f));
-	if (gameHeight != 1080 && fullScreen != 8) {
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(text->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 		text->getText()->setPosition(Vcast<float>(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres)));
 	}
@@ -251,7 +252,7 @@ void Level1Scene::Load() {
 	auto exitToMenuText = exitToMenu->addComponent<TextComponent>("Exit to Main Menu");
 	exitToMenuText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.4f));
 
-	if (gameHeight != 1080 && fullScreen != 8) {
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitToMenuText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 		exitToMenuText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
 	}
@@ -263,7 +264,7 @@ void Level1Scene::Load() {
 	auto exitGameText = exitGame->addComponent<TextComponent>("Exit to Desktop");
 	exitGameText->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.5f));
 
-	if (gameHeight != 1080 && fullScreen != 8) {
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		auto pausemenuPixels = Engine::GetWindow().mapCoordsToPixel(exitGameText->getText()->getPosition(), Engine::GetWindow().getDefaultView());
 		exitGameText->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(pausemenuPixels, viewLowres));
 	}
@@ -287,7 +288,7 @@ void Level1Scene::UnLoad() {
 
 void Level1Scene::Update(const double& dt) {
 	//Resolution
-	if (gameHeight != 1080 && fullScreen != 8) {
+	if (Engine::user_preferences.video_resolution.y != 1080) {
 		Engine::GetWindow().setView(viewLowres);
 	}
 	
