@@ -10,6 +10,5 @@ public:
   ~MenuScene() override = default;
 
   void Load() override;
-
   void Update(const double& dt) override;
 };

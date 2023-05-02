@@ -2,6 +2,7 @@
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
+#include "engine.h"
 
 using namespace std;
 using namespace sf;
@@ -30,18 +31,19 @@ bool PlayerPhysicsComponent::isGrounded() const {
 }
 
 void PlayerPhysicsComponent::update(double dt) {
-
+ 
+   
   const auto pos = _parent->getPosition();
 
   //Teleport to start if we fall off map.
   if (pos.y > ls::getHeight() * ls::getTileSize()) {
     teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
   }
-
-  if (Keyboard::isKeyPressed(Keyboard::Left) ||
-      Keyboard::isKeyPressed(Keyboard::Right)) {
+  //Ezt változtattam 
+  if (Keyboard::isKeyPressed(Engine::user_preferences.keyboard.LEFT) ||
+      Keyboard::isKeyPressed(Engine::user_preferences.keyboard.RIGHT)) {
     // Moving Either Left or Right
-    if (Keyboard::isKeyPressed(Keyboard::Right)) {
+    if (Keyboard::isKeyPressed(Engine::user_preferences.keyboard.RIGHT)) {
       if (getVelocity().x < _maxVelocity.x)
         impulse({(float)(dt * _groundspeed), 0});
     } else {
@@ -52,9 +54,10 @@ void PlayerPhysicsComponent::update(double dt) {
     // Dampen X axis movement
     dampen({0.9f, 1.0f});
   }
-
+  //Eddig fel
+  
   // Handle Jump
-  if (Keyboard::isKeyPressed(Keyboard::Up)) {
+  if (Keyboard::isKeyPressed(Engine::user_preferences.keyboard.UP)) {
     _grounded = isGrounded();
     if (_grounded) {
       setVelocity(Vector2f(getVelocity().x, 0.f));

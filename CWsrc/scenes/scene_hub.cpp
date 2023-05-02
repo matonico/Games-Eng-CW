@@ -323,7 +323,6 @@ void HubScene::Update(const double& dt) {
 	
 	if (Engine::user_preferences.video_resolution.y != 1080) {
 		Engine::GetWindow().setView(viewLowres);
-		cout << "lowres view";
 	}
 	// Handling Pausing
 	static float pauseTime = 0.0f;

@@ -10,5 +10,7 @@ public:
 	void Load() override;
 
 	void Update(const double& dt) override;
+private:
+	void HandleClick();
 };
 

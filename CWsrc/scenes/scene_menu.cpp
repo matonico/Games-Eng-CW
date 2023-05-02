@@ -123,11 +123,6 @@ void MenuScene::Load() {
 void MenuScene::Update(const double& dt) {
 	// cout << "Menu Update "<<dt<<"\n";
 
-	  //left in for testing purposes
-	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-		Engine::ChangeScene(&boss1);
-		return;
-	}
 	//Exit button
 	auto exitEnt = ents.find("Exit")[0]->GetCompatibleComponent<TextComponent>();
 	shared_ptr<TextComponent>exitButton = exitEnt.front();
