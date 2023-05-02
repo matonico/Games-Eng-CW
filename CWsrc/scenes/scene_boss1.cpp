@@ -34,6 +34,8 @@ static shared_ptr<Entity> bossHp;
 static shared_ptr<Entity> portal;
 static shared_ptr<Entity> pauseMenu;
 
+static sf::View viewLowres(sf::FloatRect(Vector2f(0, -gameHeight / 2), Vector2f(1920, 1080)));
+
 void Boss1Scene::Load() {
 	std::cout << "Boss 1 Load" << endl;
 
@@ -54,6 +56,11 @@ void Boss1Scene::Load() {
 		auto txtCmp = hpText->addComponent<TextComponent>();
 		txtCmp->SetText("HP: 50");
 		hpText->addTag("HP");
+		//dirty resolution
+		if (gameHeight != 1080 && fullScreen != 8) {
+			auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+			txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+		}
 	}
 	{
 		bossText = makeEntity();
@@ -65,6 +72,11 @@ void Boss1Scene::Load() {
 		txtCmp->getText()->setCharacterSize(45);
 		txtCmp->getText()->setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.07f));
 		bossText->addTag("BossName");
+		//dirty resolution
+		if (gameHeight != 1080 && fullScreen != 8) {
+			auto Pixels = Engine::GetWindow().mapCoordsToPixel(txtCmp->getText()->getPosition(), Engine::GetWindow().getDefaultView());
+			txtCmp->getText()->setPosition(Engine::GetWindow().mapPixelToCoords(Pixels, viewLowres));
+		}
 	}
 
 

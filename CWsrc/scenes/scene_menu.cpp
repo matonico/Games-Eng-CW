@@ -125,7 +125,7 @@ void MenuScene::Update(const double& dt) {
 
 	  //left in for testing purposes
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-		Engine::ChangeScene(&level1);
+		Engine::ChangeScene(&boss1);
 		return;
 	}
 	//Exit button
