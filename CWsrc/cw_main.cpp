@@ -10,6 +10,6 @@ Level1Scene level1;
 HubScene hub;
 Boss1Scene boss1;
 
-int main() {
+int WinMain() {
 	Engine::Start(gameWidth, gameHeight, "The Defence of Jola Prime", &menu);
 }
